@@ -22,7 +22,7 @@ class CollectionXTests: XCTestCase {
                                  imdbRating : "7.6",
                                  imdbVotes  : "12,321",
                                  imdbID     : "tt00010",
-                                 type       : "movie")
+                                 type       : "movie", plot: "", director: "", writer: "")
 
     let movie2 = OMDBItemFullInfo(title      : "The Avengers 2",
                                   year       : "2008",
@@ -35,7 +35,7 @@ class CollectionXTests: XCTestCase {
                                   imdbRating : "7.6",
                                   imdbVotes  : "12,321",
                                   imdbID     : "tt00011",
-                                  type       : "movie")
+                                  type       : "movie", plot: "", director: "", writer: "")
 
     override class func tearDown() {
         CXPersistantManager.clearAllItems()
@@ -44,7 +44,7 @@ class CollectionXTests: XCTestCase {
     func testPersistantManager_updateStatus_False() {
         CXPersistantManager.clearAllItems()
 
-        CXPersistantManager.set(status: .favorited, forItem: movie1, newState: false) { _ in print("Done") }
+        CXPersistantManager.set(status: .favorited, forItem: movie1, newState: false) { print("Done") }
         CXPersistantManager.getAll(.favorited) { XCTAssert($0 == []) }
     }
 
