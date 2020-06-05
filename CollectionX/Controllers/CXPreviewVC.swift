@@ -244,6 +244,7 @@ extension CXPreviewVC: ActionsViewDelegate {
 extension CXPreviewVC: UITableViewDelegate, UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
+        // Need to consider this as separate enum
         return 2 + 1 + 1 + 1
     }
 
