@@ -12,12 +12,13 @@ class CXActionButton: UIButton {
 
     enum State { case active, disabled }
 
-    private let firstAnimationDuration: Double = 0//0.25
-    private let secondAnimationDuration: Double = 0//0.1
+    private let firstAnimationDuration: Double = 0.25
+    private let secondAnimationDuration: Double = 0.1
 
     private      var isDisabled  : Bool    { actionState == .disabled }
     private(set) var actionState : State   = .disabled { didSet { updateUI() } }
     private      var actionColor : UIColor = .label
+    private      var titles      : ToggleTitle = Text.empty
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,13 +27,13 @@ class CXActionButton: UIButton {
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    convenience init(title: String, color: UIColor, state: CXActionButton.State = .disabled) {
+    convenience init(titles: ToggleTitle, color: UIColor, state: CXActionButton.State = .disabled) {
         self.init(type: .system)
-        self.setTitle(title, for: .normal)
-        self.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        self.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         defer {
             self.actionColor = color
             self.actionState = state
+            self.titles = titles
         }
     }
 
@@ -42,13 +43,7 @@ class CXActionButton: UIButton {
     }
 
     private func updateUI() {
-        UIView.animate(withDuration: firstAnimationDuration, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .curveEaseIn, animations: {
-            self.transform = CGAffineTransform(scaleX: 0.92, y: 0.92)
-        })
-
-        UIView.animate(withDuration: secondAnimationDuration, delay: firstAnimationDuration, usingSpringWithDamping: 0.4, initialSpringVelocity: 2, options: .curveEaseIn, animations: {
-            self.transform = CGAffineTransform.identity
-        }, completion: nil)
+        setTitle(isDisabled ? titles.disabled : titles.enabled, for: .normal)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + firstAnimationDuration) { [weak self] in
             guard let self = self else { return }
