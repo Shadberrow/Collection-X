@@ -123,10 +123,7 @@ class SearchViewController: UIViewController {
     }
 
     private func searchMovie() {
-
-        if isSearching { return }
-
-        searchPublisher = OMDBApi.search(endpoint: .matching(query: searchKey, page: page))
+        searchPublisher = OMDBApi.search(.matching(query: searchKey, page: page))
 
         searchPublisher
             .receive(on: RunLoop.main)

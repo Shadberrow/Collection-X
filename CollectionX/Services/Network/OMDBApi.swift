@@ -19,7 +19,7 @@ enum OMDBApi {
 
     static let agent = ApiAgent()
 
-    static func search<T: Codable>(endpoint: Endpoint) -> AnyPublisher<T, Error> {
+    static func search<T: Codable>(_ endpoint: Endpoint) -> AnyPublisher<T, Error> {
         guard let url = endpoint.url else { return Fail(error: OMDBApiError.badURL).eraseToAnyPublisher() }
         print(url)
         return agent.run(url)
