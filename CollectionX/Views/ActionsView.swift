@@ -78,13 +78,13 @@ class ActionsView: UIView {
     private func setupSubviews() {
         spacer = UIView()
 
-        favoriteBtn = CXActionButton(title: "Favorite", color: .systemYellow)
+        favoriteBtn = CXActionButton(titles: Text.favorite, color: .systemYellow)
         favoriteBtn.addTarget(self, action: #selector(handleFavoriteAction), for: .touchUpInside)
 
-        watchlistBtn = CXActionButton(title: "Watchlist", color: .systemRed)
+        watchlistBtn = CXActionButton(titles: Text.watchlist, color: .systemRed)
         watchlistBtn.addTarget(self, action: #selector(handleWatchlistAction), for: .touchUpInside)
 
-        checkInBtn = CXActionButton(title: "Check-in", color: .systemGreen)
+        checkInBtn = CXActionButton(titles: Text.checkIn, color: .systemGreen)
         checkInBtn.addTarget(self, action: #selector(handleCheckInAction), for: .touchUpInside)
     }
 
