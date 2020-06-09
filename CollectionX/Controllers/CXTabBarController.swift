@@ -23,7 +23,7 @@ class CXTabBarController: UITabBarController {
                                                       title: "Search",
                                                       icon: SFSymbols.magnifyingGlass,
                                                       tag: 2)
-        libraryNavController  = createTabController(controller: FavoritesViewController(),
+        libraryNavController  = createTabController(controller: LibraryViewController(),
                                                       title: "Library",
                                                       icon: SFSymbols.cards,
                                                       tag: 3)
