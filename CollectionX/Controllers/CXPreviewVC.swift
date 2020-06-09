@@ -95,10 +95,10 @@ class CXPreviewVC: UIViewController {
             .store(in: &subscibers)
 
         if let status = CXPersistantManager.status(forItem: id) {
+            itemInfo = CXPersistantManager.get(itemID: id)
             isFavorited = status.isFavorited
             isWatchlist = status.isBookmarked
             isCheckedIn = status.isCheckedIn
-            itemInfo = CXPersistantManager.get(itemID: id)
         }
 
         fetchItemInfo()
@@ -119,14 +119,16 @@ class CXPreviewVC: UIViewController {
         titleLabel.text = "Loading..."
         titleLabel.textColor = .label
         titleLabel.numberOfLines = 0
-        titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .title1, withTrait: .traitBold)
+        titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.clipsToBounds = false
 
         subtitleLabel = UILabel()
         subtitleLabel.text = "Loading..."
         subtitleLabel.textColor = .label
-        subtitleLabel.numberOfLines = 1
-        subtitleLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        subtitleLabel.numberOfLines = 0
+        subtitleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+        subtitleLabel.adjustsFontForContentSizeCategory = true
 
         tableView = UITableView()
         tableView.backgroundColor = .clear
@@ -209,7 +211,7 @@ class CXPreviewVC: UIViewController {
         guard let itemInfo = itemInfo else { return }
         print(itemInfo)
         titleLabel.text = itemInfo.title
-        subtitleLabel.text = "\(itemInfo.prettyYear)   \(itemInfo.rated)   \(itemInfo.prettyRuntime)"
+        subtitleLabel.text = "\(itemInfo.prettyYear)   \(itemInfo.rated)   \(itemInfo.prettyRuntime)   \(itemInfo.type.prefix(1).capitalized + itemInfo.type.dropFirst())"
         tableView.reloadData()
     }
 
@@ -254,12 +256,12 @@ extension CXPreviewVC: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: ItemInfoCell.reuseIdentifier, for: indexPath) as! ItemInfoCell
-            cell.setup(title: "Genre", description: itemInfo?.genre ?? "N/A")
-            return cell
-        } else if indexPath.section == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: ItemPosterInfoCell.reuseIdentifier, for: indexPath) as! ItemPosterInfoCell
             cell.setup(forItemInfo: itemInfo)
+            return cell
+        } else if indexPath.section == 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: ItemInfoCell.reuseIdentifier, for: indexPath) as! ItemInfoCell
+            cell.setup(title: "Genre", description: itemInfo?.genre ?? "N/A")
             return cell
         } else if indexPath.section == 2 {
             let cell = tableView.dequeueReusableCell(withIdentifier: ItemInfoCell.reuseIdentifier, for: indexPath) as! ItemInfoCell
