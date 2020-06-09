@@ -56,16 +56,16 @@ class ItemPosterInfoCell: UITableViewCell {
         imdbRatingLabel = UILabel()
         imdbRatingLabel.text = "..."
         imdbRatingLabel.textColor = .label
-        imdbRatingLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        imdbRatingLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
 
         imdbVotesLabel = UILabel()
         imdbVotesLabel.text = "..."
         imdbVotesLabel.textColor = .secondaryLabel
-        imdbVotesLabel.font = UIFont.systemFont(ofSize: 8, weight: .regular)
+        imdbVotesLabel.font = UIFont.monospacedSystemFont(ofSize: 10, weight: .regular)
 
         plotTextView = UITextView()
         plotTextView.text = "Loading..."
-        plotTextView.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        plotTextView.font = UIFont.preferredFont(forTextStyle: .body)
         plotTextView.isScrollEnabled = false
         plotTextView.isSelectable = false
         plotTextView.textColor = .label
@@ -102,12 +102,12 @@ class ItemPosterInfoCell: UITableViewCell {
         imdbInfoViewBottomAnchor.priority = .init(749)
         imdbInfoView.pin(.trailing, to: imdbRatingLabel.trailing)
         imdbInfoView.centerX(in: posterImageView)
-        imdbInfoView.height(25)
+        imdbInfoView.height(30)
 
         imdbLogoImageView.pin(.top, to: imdbInfoView.top)
         imdbLogoImageView.pin(.leading, to: imdbInfoView.leading)
         imdbLogoImageView.pin(.bottom, to: imdbInfoView.bottom)
-        imdbLogoImageView.width(45)
+        imdbLogoImageView.width(53)
 
         imdbRatingLabel.pin(.top, to: imdbLogoImageView.top)
         imdbRatingLabel.pin(.leading, to: imdbLogoImageView.trailing, constant: 8)
