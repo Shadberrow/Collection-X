@@ -16,7 +16,7 @@ class ItemPosterInfoCell: UITableViewCell {
     private var imdbLogoImageView: UIImageView!
     private var imdbRatingLabel: UILabel!
     private var imdbVotesLabel: UILabel!
-    private var plotLabel: UITextView!
+    private var plotTextView: UITextView!
     private var imdbInfoView: UIView!
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -42,7 +42,7 @@ class ItemPosterInfoCell: UITableViewCell {
         containerView.layer.cornerRadius = 18
 
         posterImageView = CachedImageView(cornerRadius: 12, placeholder: Images.logo_placeholder)
-        posterImageView.tintColor = .black
+        posterImageView.tintColor = .label
         posterImageView.contentMode = .scaleAspectFit
         posterImageView.clipsToBounds = true
 
@@ -63,16 +63,16 @@ class ItemPosterInfoCell: UITableViewCell {
         imdbVotesLabel.textColor = .secondaryLabel
         imdbVotesLabel.font = UIFont.systemFont(ofSize: 8, weight: .regular)
 
-        plotLabel = UITextView()
-        plotLabel.text = "Loading..."
-        plotLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        plotLabel.isScrollEnabled = false
-        plotLabel.isSelectable = false
-        plotLabel.textColor = .label
-        plotLabel.backgroundColor = .clear
-        plotLabel.textContainerInset = .zero
-        plotLabel.textContainer.lineFragmentPadding = 0
-        plotLabel.textContainer.lineBreakMode = .byTruncatingTail
+        plotTextView = UITextView()
+        plotTextView.text = "Loading..."
+        plotTextView.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        plotTextView.isScrollEnabled = false
+        plotTextView.isSelectable = false
+        plotTextView.textColor = .label
+        plotTextView.backgroundColor = .clear
+        plotTextView.textContainerInset = .zero
+        plotTextView.textContainer.lineFragmentPadding = 0
+        plotTextView.textContainer.lineBreakMode = .byTruncatingTail
     }
 
     private func addSubviews() {
@@ -82,7 +82,7 @@ class ItemPosterInfoCell: UITableViewCell {
         imdbInfoView.addSubview(imdbLogoImageView)
         imdbInfoView.addSubview(imdbRatingLabel)
         imdbInfoView.addSubview(imdbVotesLabel)
-        containerView.addSubview(plotLabel)
+        containerView.addSubview(plotTextView)
     }
 
     private func setupConstraints() {
@@ -95,10 +95,11 @@ class ItemPosterInfoCell: UITableViewCell {
         posterImageView.pin(.leading, to: containerView.leading, constant: 16)
         posterImageView.width(equalTo: posterImageView.height, multiplier: 2/3)
         let posterHeightConstraint = posterImageView.height(170)
-        posterHeightConstraint.priority = .init(999)
+        posterHeightConstraint.priority = .init(1e3)
 
         imdbInfoView.pin(.top, to: posterImageView.bottom, constant: 6)
-        imdbInfoView.pin(.bottom, to: containerView.bottom, constant: 16)
+        let imdbInfoViewBottomAnchor = imdbInfoView.pin(.bottom, to: containerView.bottom, constant: 16)
+        imdbInfoViewBottomAnchor.priority = .init(749)
         imdbInfoView.pin(.trailing, to: imdbRatingLabel.trailing)
         imdbInfoView.centerX(in: posterImageView)
         imdbInfoView.height(25)
@@ -114,18 +115,18 @@ class ItemPosterInfoCell: UITableViewCell {
         imdbVotesLabel.pin(.bottom, to: imdbLogoImageView.bottom)
         imdbVotesLabel.pin(.leading, to: imdbRatingLabel.leading)
 
-        plotLabel.pin(.top, to: posterImageView.top)
-        plotLabel.pin(.leading, to: posterImageView.trailing, constant: 12)
-        plotLabel.pin(.trailing, to: containerView.trailing, constant: 16)
-        let plotLabelConstraint = plotLabel.pin(.bottom, to: containerView.bottom, constant: 16)
-        plotLabelConstraint.priority = .init(100)
+        plotTextView.pin(.top, to: posterImageView.top)
+        plotTextView.pin(.leading, to: posterImageView.trailing, constant: 12)
+        plotTextView.pin(.trailing, to: containerView.trailing, constant: 16)
+        let plotTextViewBottomAnchor = plotTextView.pin(.bottom, to: containerView.bottom, constant: 16)
+        plotTextViewBottomAnchor.priority = .init(1e3)
     }
 
     func setup(forItemInfo item: OMDBItemFullInfo?) {
         posterImageView.downloadImage(stringUrl: item?.posterUrl)
 
         guard let item = item else { return }
-        plotLabel.text = item.plot
+        plotTextView.text = item.plot
         imdbRatingLabel.text = "\(item.imdbRating)/10"
         imdbVotesLabel.text = item.imdbVotes
     }
