@@ -1,5 +1,5 @@
 //
-//  FavoritesViewController.swift
+//  LibraryViewController.swift
 //  CollectionX
 //
 //  Created by Yevhenii on 11.05.2020.
@@ -10,12 +10,30 @@ import UIKit
 import Combine
 import YVAnchor
 
-class FavoritesViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
+class LibraryViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
 
-    private var tableView: UITableView!
-    private var favorites: [OMDBItemFullInfo] = []
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, OMDBItemFullInfo>
+    typealias DataSourceSnapshot = NSDiffableDataSourceSnapshot<Section, OMDBItemFullInfo>
+
+    enum Section { case main }
+
+    private var collectionView      : UICollectionView!
+    private var collectionLayout    : UICollectionViewFlowLayout!
+    private var dataSource          : DataSource!
+    private var snapshot            : DataSourceSnapshot!
+
+    private var favorites: [OMDBItemFullInfo] = [] {
+        didSet { updateUI(with: favorites) }
+    }
+    private var segmentedControl: UISegmentedControl!
 
     private var subscriptions = Set<AnyCancellable>()
+
+    let segmentTextContent = [
+        Text.watchlist.disabled,
+        Text.favorite.disabled,
+        Text.checkIn.disabled
+    ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +42,7 @@ class FavoritesViewController: UIViewController, UIAdaptivePresentationControlle
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        retreiveFavorites()
+        handleSegmentChange(segmentedControl)
     }
 
     private func setupView() {
@@ -36,65 +54,90 @@ class FavoritesViewController: UIViewController, UIAdaptivePresentationControlle
     }
 
     private func setupSubviews() {
-        tableView = UITableView()
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(FavoriteItemCell.self, forCellReuseIdentifier: FavoriteItemCell.reuseIdentifier)
-    }
+        segmentedControl = UISegmentedControl(items: segmentTextContent)
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.autoresizingMask = .flexibleWidth
+        segmentedControl.frame = CGRect(x: 0, y: 0, width: 400, height: 30)
+        segmentedControl.addTarget(self, action: #selector(handleSegmentChange), for: .valueChanged)
 
-    private func addSubviews() {
-        view.addSubview(tableView)
-    }
+        let padding: CGFloat                = 12
+        let minimumItemSpacing: CGFloat     = 10
+        let availableWidth                  = view.bounds.width - (padding * 3) - (minimumItemSpacing * 2)
+        let itemWidth                       = availableWidth / 3
 
-    private func setupConstraints() {
-        tableView.fill(in: view)
-    }
+        collectionLayout = UICollectionViewFlowLayout()
+        collectionLayout.sectionInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
+        collectionLayout.itemSize = CGSize(width: itemWidth, height: 4/3 * itemWidth)
 
-    private func retreiveFavorites() {
-        CXPersistantManager.getAll(.favorited, completion: { [weak self] items in
-            self?.updateUI(with: items)
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionLayout)
+        collectionView.delegate = self
+        collectionView.register(ItemCardCell.self, forCellWithReuseIdentifier: ItemCardCell.reuseIdentifier)
+        collectionView.delegate = self
+        collectionView.backgroundColor = .systemBackground
+        collectionView.alwaysBounceVertical = true
+
+        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { (collectionView, indexPath, item) -> ItemCardCell? in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItemCardCell.reuseIdentifier, for: indexPath) as! ItemCardCell
+            cell.setup(withImageURLSting: item.posterUrl)
+            return cell
         })
     }
 
+    private func addSubviews() {
+        navigationItem.titleView = segmentedControl
+
+        view.addSubview(collectionView)
+    }
+
+    private func setupConstraints() {
+        collectionView.fill(in: view)
+    }
+
     private func updateUI(with items: [OMDBItemFullInfo]) {
-        favorites = items
-        DispatchQueue.main.async { self.tableView.reloadData() }
+        navigationItem.prompt = NSLocalizedString("\(items.count) items in this list", comment: "")
+        updateData(for: items)
+    }
+
+    private func updateData(for items: [OMDBItemFullInfo]) {
+        var snapshot = DataSourceSnapshot()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(favorites)
+
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+
+    @objc
+    private func handleSegmentChange(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            CXPersistantManager.getAll(.bookmarked, then: setter(for: self, \.favorites))
+        case 1:
+            CXPersistantManager.getAll(.favorited, then: setter(for: self, \.favorites))
+        case 2:
+            CXPersistantManager.getAll(.checkedIn, then: setter(for: self, \.favorites))
+        default: return
+        }
     }
 
 }
 
-// MARK: - Table View Data Source / Delegate
 
-extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
+extension LibraryViewController: UICollectionViewDelegate {
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return favorites.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: FavoriteItemCell.reuseIdentifier, for: indexPath) as! FavoriteItemCell
-        cell.setup(with: favorites[indexPath.item])
-        return cell
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let item = favorites[indexPath.row]
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
         let vc = CXPreviewVC(itemID: item.imdbID, posterURLString: item.posterUrl)
         vc.delegate = self
         present(vc, animated: true)
     }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100 + 8 + 8
-    }
-
 }
 
 
-extension FavoritesViewController: CXPreviewVCDelegate {
+extension LibraryViewController: CXPreviewVCDelegate {
 
     func previewControllerWillDismiss(_ controller: CXPreviewVC) {
-        retreiveFavorites()
+        handleSegmentChange(segmentedControl)
     }
 
 }
