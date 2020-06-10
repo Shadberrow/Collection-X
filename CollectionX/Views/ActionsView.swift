@@ -26,9 +26,9 @@ class ActionsView: UIView {
     private var checkInBtn          : CXActionButton!
     private var spacer              : UIView!
 
-    private let fullSizeMultiplier  : CGFloat = 0.48
-    private let middleSizeMultiplier: CGFloat = (1 - 0.04 - 0.04) / 3
-    private let spacerSizeMultiplier: CGFloat = 0.04
+    private let fullSizeMultiplier  : CGFloat = 0.49
+    private let middleSizeMultiplier: CGFloat = (1 - 0.02 - 0.02) / 3
+    private let spacerSizeMultiplier: CGFloat = 0.02
     private let hiddenSizeConstant  : CGFloat = 0.00
 
     var isFavorited: Bool = false {

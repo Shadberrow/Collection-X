@@ -67,7 +67,7 @@ class LibraryViewController: UIViewController, UIAdaptivePresentationControllerD
 
         collectionLayout = UICollectionViewFlowLayout()
         collectionLayout.sectionInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
-        collectionLayout.itemSize = CGSize(width: itemWidth, height: 4/3 * itemWidth)
+        collectionLayout.itemSize = CGSize(width: itemWidth, height: 3/2 * itemWidth)
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionLayout)
         collectionView.delegate = self

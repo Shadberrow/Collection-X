@@ -12,7 +12,7 @@ class CXActionButton: UIButton {
 
     enum State { case active, disabled }
 
-    private let firstAnimationDuration: Double = 0.25
+    private let firstAnimationDuration: Double = 0//0.25
     private let secondAnimationDuration: Double = 0.1
 
     private      var isDisabled  : Bool    { actionState == .disabled }
@@ -29,7 +29,7 @@ class CXActionButton: UIButton {
 
     convenience init(titles: ToggleTitle, color: UIColor, state: CXActionButton.State = .disabled) {
         self.init(type: .system)
-        self.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        self.titleLabel?.font = UIFont.systemFont(ofSize: 11, weight: .semibold)
         defer {
             self.actionColor = color
             self.actionState = state
@@ -39,12 +39,10 @@ class CXActionButton: UIButton {
 
     private func setupView() {
         setTitleColor(.white, for: .normal)
-        layer.cornerRadius      = 10
+        layer.cornerRadius = 8
     }
 
     private func updateUI() {
-        setTitle(isDisabled ? titles.disabled : titles.enabled, for: .normal)
-
         DispatchQueue.main.asyncAfter(deadline: .now() + firstAnimationDuration) { [weak self] in
             guard let self = self else { return }
             self.layer.borderColor = self.isDisabled ? self.actionColor.cgColor : UIColor.clear.cgColor
@@ -53,6 +51,10 @@ class CXActionButton: UIButton {
             self.backgroundColor = self.isDisabled ? .clear : self.actionColor
             self.setTitleColor(self.isDisabled ? .label : .secondarySystemBackground, for: .normal)
         }
+
+        UIView.setAnimationsEnabled(false)
+        self.setTitle(self.isDisabled ? self.titles.disabled.uppercased() : self.titles.enabled.uppercased(), for: .normal)
+        UIView.setAnimationsEnabled(true)
     }
 
     func set(actionState: State) {
