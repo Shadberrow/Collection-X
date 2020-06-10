@@ -16,7 +16,6 @@
 		576258DB2469442C00146623 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576258DA2469442C00146623 /* FavoritesViewController.swift */; };
 		576258DD2469444000146623 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576258DC2469444000146623 /* SettingsViewController.swift */; };
 		576258E0246944C400146623 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576258DF246944C400146623 /* Constants.swift */; };
-		576258E724698E1C00146623 /* MovieInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576258E624698E1C00146623 /* MovieInfoView.swift */; };
 		576258EF246A90C200146623 /* ItemCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576258EE246A90C200146623 /* ItemCardCell.swift */; };
 		576258F4246A90E700146623 /* ReusableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576258F3246A90E700146623 /* ReusableCell.swift */; };
 		576258F6246AC7B800146623 /* ActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576258F5246AC7B800146623 /* ActionsView.swift */; };
@@ -24,6 +23,7 @@
 		5787E8F12488A4B400AD5581 /* YVAnchor in Frameworks */ = {isa = PBXBuildFile; productRef = 5787E8F02488A4B400AD5581 /* YVAnchor */; };
 		5787E8F32488C69400AD5581 /* ItemPosterInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5787E8F22488C69400AD5581 /* ItemPosterInfoCell.swift */; };
 		5787E8F52489102E00AD5581 /* ItemInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5787E8F42489102E00AD5581 /* ItemInfoCell.swift */; };
+		5787E8F7248CA96800AD5581 /* KeyPathSetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5787E8F6248CA96800AD5581 /* KeyPathSetter.swift */; };
 		578E26A6247E80CC007C8612 /* CollectionXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578E26A5247E80CC007C8612 /* CollectionXTests.swift */; };
 		578E26AE247F6E10007C8612 /* OMDBItemStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578E26AD247F6E10007C8612 /* OMDBItemStatus.swift */; };
 		578E26B0247FD26D007C8612 /* OMDBItemBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578E26AF247FD26D007C8612 /* OMDBItemBox.swift */; };
@@ -35,6 +35,7 @@
 		57A56CCC247E2D52002544D8 /* OMDBItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A56CCB247E2D52002544D8 /* OMDBItem.swift */; };
 		57A56CCE247E2D67002544D8 /* OMDBSearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A56CCD247E2D67002544D8 /* OMDBSearchResponse.swift */; };
 		57A56CD0247E2D7B002544D8 /* OMDBItemFullInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A56CCF247E2D7B002544D8 /* OMDBItemFullInfo.swift */; };
+		57B2811E248F3213000A6669 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B2811D248F3213000A6669 /* UIFont+.swift */; };
 		57CC46A9246E82F9001BA893 /* CachedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CC46A8246E82F9001BA893 /* CachedImageView.swift */; };
 		57D142F224877D8D00588DE8 /* NSLayoutConstraint+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D142F124877D8D00588DE8 /* NSLayoutConstraint+.swift */; };
 		57D349BA2466D44700096305 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D349B92466D44700096305 /* AppDelegate.swift */; };
@@ -42,6 +43,7 @@
 		57D349C32466D44900096305 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57D349C22466D44900096305 /* Assets.xcassets */; };
 		57D349C62466D44900096305 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57D349C42466D44900096305 /* LaunchScreen.storyboard */; };
 		57E2E39B2469421500BC49DD /* CXTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E2E39A2469421500BC49DD /* CXTabBarController.swift */; };
+		57FA0C53248FBC9000EA12DB /* ItemTitleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FA0C52248FBC9000EA12DB /* ItemTitleInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,13 +66,13 @@
 		576258DA2469442C00146623 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		576258DC2469444000146623 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		576258DF246944C400146623 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		576258E624698E1C00146623 /* MovieInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieInfoView.swift; sourceTree = "<group>"; };
 		576258EE246A90C200146623 /* ItemCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCardCell.swift; sourceTree = "<group>"; };
 		576258F3246A90E700146623 /* ReusableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableCell.swift; sourceTree = "<group>"; };
 		576258F5246AC7B800146623 /* ActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsView.swift; sourceTree = "<group>"; };
 		576258F7246AC80600146623 /* CXActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CXActionButton.swift; sourceTree = "<group>"; };
 		5787E8F22488C69400AD5581 /* ItemPosterInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemPosterInfoCell.swift; sourceTree = "<group>"; };
 		5787E8F42489102E00AD5581 /* ItemInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemInfoCell.swift; sourceTree = "<group>"; };
+		5787E8F6248CA96800AD5581 /* KeyPathSetter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPathSetter.swift; sourceTree = "<group>"; };
 		578E26A3247E80CC007C8612 /* CollectionXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CollectionXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		578E26A5247E80CC007C8612 /* CollectionXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionXTests.swift; sourceTree = "<group>"; };
 		578E26A7247E80CC007C8612 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 		57A56CCB247E2D52002544D8 /* OMDBItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OMDBItem.swift; sourceTree = "<group>"; };
 		57A56CCD247E2D67002544D8 /* OMDBSearchResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OMDBSearchResponse.swift; sourceTree = "<group>"; };
 		57A56CCF247E2D7B002544D8 /* OMDBItemFullInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OMDBItemFullInfo.swift; sourceTree = "<group>"; };
+		57B2811D248F3213000A6669 /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		57CC46A8246E82F9001BA893 /* CachedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedImageView.swift; sourceTree = "<group>"; };
 		57D142F124877D8D00588DE8 /* NSLayoutConstraint+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSLayoutConstraint+.swift"; sourceTree = "<group>"; };
 		57D349B62466D44700096305 /* CollectionX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CollectionX.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -93,6 +96,7 @@
 		57D349C52466D44900096305 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		57D349C72466D44900096305 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		57E2E39A2469421500BC49DD /* CXTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CXTabBarController.swift; sourceTree = "<group>"; };
+		57FA0C52248FBC9000EA12DB /* ItemTitleInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTitleInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +135,7 @@
 			children = (
 				576258DF246944C400146623 /* Constants.swift */,
 				57299B922477970A0042EE52 /* CardsCollectionLayout.swift */,
+				5787E8F6248CA96800AD5581 /* KeyPathSetter.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -151,6 +156,7 @@
 				57A56CC2247CC1D8002544D8 /* FavoriteItemCell.swift */,
 				5787E8F22488C69400AD5581 /* ItemPosterInfoCell.swift */,
 				5787E8F42489102E00AD5581 /* ItemInfoCell.swift */,
+				57FA0C52248FBC9000EA12DB /* ItemTitleInfo.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -160,6 +166,7 @@
 			children = (
 				576258F3246A90E700146623 /* ReusableCell.swift */,
 				57D142F124877D8D00588DE8 /* NSLayoutConstraint+.swift */,
+				57B2811D248F3213000A6669 /* UIFont+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -206,7 +213,6 @@
 		57A56CD3247E2F5C002544D8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				576258E624698E1C00146623 /* MovieInfoView.swift */,
 				576258F5246AC7B800146623 /* ActionsView.swift */,
 				57A56CD7247E3067002544D8 /* Buttons */,
 				57A56CD6247E3060002544D8 /* ImageViews */,
@@ -411,10 +417,12 @@
 				57CC46A9246E82F9001BA893 /* CachedImageView.swift in Sources */,
 				576258F6246AC7B800146623 /* ActionsView.swift in Sources */,
 				57A56CC7247E2BBB002544D8 /* ApiAgent.swift in Sources */,
+				5787E8F7248CA96800AD5581 /* KeyPathSetter.swift in Sources */,
 				57D142F224877D8D00588DE8 /* NSLayoutConstraint+.swift in Sources */,
 				576258D92469441500146623 /* SearchViewController.swift in Sources */,
 				576258F8246AC80600146623 /* CXActionButton.swift in Sources */,
 				57A56CC3247CC1D8002544D8 /* FavoriteItemCell.swift in Sources */,
+				57B2811E248F3213000A6669 /* UIFont+.swift in Sources */,
 				578E26B0247FD26D007C8612 /* OMDBItemBox.swift in Sources */,
 				57D349BA2466D44700096305 /* AppDelegate.swift in Sources */,
 				57A56CCE247E2D67002544D8 /* OMDBSearchResponse.swift in Sources */,
@@ -430,7 +438,6 @@
 				57A56CD0247E2D7B002544D8 /* OMDBItemFullInfo.swift in Sources */,
 				576258DD2469444000146623 /* SettingsViewController.swift in Sources */,
 				576258F4246A90E700146623 /* ReusableCell.swift in Sources */,
-				576258E724698E1C00146623 /* MovieInfoView.swift in Sources */,
 				57A56CC5247E2B3E002544D8 /* Endpoint.swift in Sources */,
 				57A56CC9247E2D14002544D8 /* OMDBApi.swift in Sources */,
 				57A56CC1247AE249002544D8 /* CXPersistantManager.swift in Sources */,
@@ -438,6 +445,7 @@
 				5787E8F52489102E00AD5581 /* ItemInfoCell.swift in Sources */,
 				57299B932477970A0042EE52 /* CardsCollectionLayout.swift in Sources */,
 				573901F42487CD7E00DF64A6 /* CXPreviewVC.swift in Sources */,
+				57FA0C53248FBC9000EA12DB /* ItemTitleInfo.swift in Sources */,
 				576258E0246944C400146623 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -626,6 +634,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 4K9UHWUGWY;
 				INFOPLIST_FILE = CollectionX/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -634,7 +643,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.gmail.veret.evg.Collection-X";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -648,6 +657,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 4K9UHWUGWY;
 				INFOPLIST_FILE = CollectionX/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -656,7 +666,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.gmail.veret.evg.Collection-X";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
