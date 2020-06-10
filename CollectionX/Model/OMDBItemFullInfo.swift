@@ -55,7 +55,10 @@ struct OMDBItemFullInfo: Codable, Hashable {
         let hours = minutesInt / 60
         
         return minutesInt == 60 ? "\(minutesInt)m" : (minutesInt < 60 ? "\(minutes)m" : "\(hours)h \(minutes)m")
+    }
 
+    var prettySubinfo: String {
+        return "\(prettyYear)   \(rated)   \(prettyRuntime)   \(type.prefix(1).capitalized + type.dropFirst())"
     }
 
 }
