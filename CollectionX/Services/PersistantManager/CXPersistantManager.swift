@@ -34,9 +34,10 @@ enum CXPersistantManager {
         defaults.set(nil, forKey: Keys.allStatuses)
     }
 
-    static func getAll(_ forStatus: ItemStatusType, completion: @escaping ([OMDBItemFullInfo]) -> Void) {
-        let allItems = retreiveAllItems()
-        let allStatuses = retreiveAllStatuses().filter({ status in
+    static func getAll(_ forStatus: ItemStatusType, then: @escaping ([OMDBItemFullInfo]) -> Void) {
+        let allItems: [OMDBItemFullInfo] = getAll(forKey: Keys.allItems)
+        var allStatuses: [OMDBItemStatus] = getAll(forKey: Keys.allStatuses)
+        allStatuses = allStatuses.filter({ status in
             switch forStatus {
             case .favorited : return status.isFavorited
             case .bookmarked: return status.isBookmarked
@@ -44,20 +45,22 @@ enum CXPersistantManager {
             }
         })
         let filtered = allItems.filter { item in allStatuses.contains(where: { $0.imdbID == item.imdbID }) }
-        completion(filtered)
+        then(filtered)
     }
 
     static func get(itemID: String) -> OMDBItemFullInfo? {
-        let allItems = retreiveAllItems()
-        return allItems.first(where: { $0.imdbID == itemID })
+        let array: [OMDBItemFullInfo] = getAll(forKey: Keys.allItems)
+        return array.first(where: { $0.imdbID == itemID })
     }
 
     static func status(forItem itemID: String) -> OMDBItemStatus? {
-        return retreiveAllStatuses().first(where: { $0.imdbID == itemID })
+        let array: [OMDBItemStatus] = getAll(forKey: Keys.allStatuses)
+        return array.first(where: { $0.imdbID == itemID })
     }
 
-    static func set(status: ItemStatusType, forItem item: OMDBItemFullInfo, newState state: Bool, completion: (() -> Void)? = nil) {
-        let oldStatus = retreiveAllStatuses().first(where: { $0.imdbID == item.imdbID })
+    static func set(status: ItemStatusType, forItem item: OMDBItemFullInfo, newState state: Bool, then: (() -> Void)? = nil) {
+        let allStatuses: [OMDBItemStatus] = getAll(forKey: Keys.allStatuses)
+        let oldStatus = allStatuses.first(where: { $0.imdbID == item.imdbID })
 
         if state { saveItemInfo(item) }
 
@@ -67,21 +70,21 @@ enum CXPersistantManager {
                 if !oldStatus.isCheckedIn && !oldStatus.isBookmarked {
                     removeItemInfo(item)
                     removeStatus(oldStatus)
-                    completion?()
+                    then?()
                     return
                 }
             case .bookmarked:
                 if !oldStatus.isCheckedIn && !oldStatus.isFavorited {
                     removeItemInfo(item)
                     removeStatus(oldStatus)
-                    completion?()
+                    then?()
                     return
                 }
             case .checkedIn:
                 if !oldStatus.isFavorited && !oldStatus.isBookmarked {
                     removeItemInfo(item)
                     removeStatus(oldStatus)
-                    completion?()
+                    then?()
                     return
                 }
             }
@@ -96,64 +99,49 @@ enum CXPersistantManager {
             saveStatus(itemStatus)
         }
 
-        completion?()
+        then?()
     }
 
 // -----------
 
     private static func saveItemInfo(_ info: OMDBItemFullInfo) {
-        var items = retreiveAllItems()
-        if items.contains(where: { $0.imdbID == info.imdbID }) { return }
+        var items: [OMDBItemFullInfo] = getAll(forKey: Keys.allItems)
+        items.removeAll(where: { $0.imdbID == info.imdbID })
         items.append(info)
-        saveAllItems(items)
+        saveAll(items, forKey: Keys.allItems)
     }
 
     private static func removeItemInfo(_ info: OMDBItemFullInfo) {
-        var items = retreiveAllItems()
+        var items: [OMDBItemFullInfo] = getAll(forKey: Keys.allItems)
         items.removeAll(where: { $0.imdbID == info.imdbID })
-        saveAllItems(items)
+        saveAll(items, forKey: Keys.allItems)
     }
-
-    private static func retreiveAllItems() -> [OMDBItemFullInfo] {
-        guard let data = defaults.data(forKey: Keys.allItems) else { return [] }
-        do {
-            return try JSONDecoder().decode([OMDBItemFullInfo].self, from: data)
-        } catch { print(error); return [] }
-    }
-
-    private static func saveAllItems(_ items: [OMDBItemFullInfo]) {
-        do {
-            let data = try JSONEncoder().encode(items)
-            defaults.set(data, forKey: Keys.allItems)
-        } catch { print(error) }
-    }
-
-
 
     private static func saveStatus(_ newStatus: OMDBItemStatus) {
-        var statuses = retreiveAllStatuses()
+        var statuses: [OMDBItemStatus] = getAll(forKey: Keys.allStatuses)
         statuses.removeAll(where: { $0.imdbID == newStatus.imdbID })
         statuses.append(newStatus)
-        saveAllStatuses(statuses)
+        saveAll(statuses, forKey: Keys.allStatuses)
     }
 
     private static func removeStatus(_ status: OMDBItemStatus) {
-        var items = retreiveAllStatuses()
+        var items: [OMDBItemStatus] = getAll(forKey: Keys.allStatuses)
         items.removeAll(where: { $0.imdbID == status.imdbID })
-        saveAllStatuses(items)
+        saveAll(items, forKey: Keys.allStatuses)
     }
 
-    private static func retreiveAllStatuses() -> [OMDBItemStatus] {
-        guard let data = defaults.data(forKey: Keys.allStatuses) else { return [] }
+
+    private static func getAll<D: Decodable>(forKey key: String) -> [D] {
+        guard let data = defaults.data(forKey: key) else { return [] }
         do {
-            return try JSONDecoder().decode([OMDBItemStatus].self, from: data)
+            return try JSONDecoder().decode([D].self, from: data)
         } catch { print(error); return [] }
     }
 
-    private static func saveAllStatuses(_ items: [OMDBItemStatus]) {
+    private static func saveAll<D: Encodable>(_ data: D, forKey key: String) {
         do {
-            let data = try JSONEncoder().encode(items)
-            defaults.set(data, forKey: Keys.allStatuses)
+            let data = try JSONEncoder().encode(data)
+            defaults.set(data, forKey: key)
         } catch { print(error) }
     }
 
