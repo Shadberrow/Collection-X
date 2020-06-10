@@ -24,6 +24,15 @@ extension CXPreviewVCDelegate {
 
 class CXPreviewVC: UIViewController {
 
+    enum Section {
+        static let HEADER_TITLE     = 0
+        static let POSTER_INFO      = 1
+        static let GENRE_INFO       = 2
+        static let WRITER_INFO      = 3
+        static let DIRECTOR_INFO    = 4
+        static let ACTORS_INFO      = 5
+    }
+
     private var backgroundImageView     : CachedImageView!
     private var backgroundBluredView    : UIVisualEffectView!
     private var tableView               : UITableView!
@@ -31,8 +40,8 @@ class CXPreviewVC: UIViewController {
     private var actionsView             : ActionsView!
     private var actionsViewContainer    : UIView!
 
-    private var titleLabel              : UILabel!
-    private var subtitleLabel           : UILabel!
+//    private var titleLabel              : UILabel!
+//    private var subtitleLabel           : UILabel!
 
     private var itemInfo                : OMDBItemFullInfo? { didSet { self.update() } }
     private var subscibers              = Set<AnyCancellable>()
@@ -115,25 +124,26 @@ class CXPreviewVC: UIViewController {
         closeButton = CXCloseButton()
         closeButton.addTarget(self, action: #selector(closeScreen), for: .touchUpInside)
 
-        titleLabel = UILabel()
-        titleLabel.text = "Loading..."
-        titleLabel.textColor = .label
-        titleLabel.numberOfLines = 0
-        titleLabel.font = UIFont.preferredFont(forTextStyle: .title1, withTrait: .traitBold)
-        titleLabel.adjustsFontForContentSizeCategory = true
-        titleLabel.clipsToBounds = false
-
-        subtitleLabel = UILabel()
-        subtitleLabel.text = "Loading..."
-        subtitleLabel.textColor = .label
-        subtitleLabel.numberOfLines = 0
-        subtitleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
-        subtitleLabel.adjustsFontForContentSizeCategory = true
+//        titleLabel = UILabel()
+//        titleLabel.text = "Loading..."
+//        titleLabel.textColor = .label
+//        titleLabel.numberOfLines = 0
+//        titleLabel.font = UIFont.preferredFont(forTextStyle: .title1, withTrait: .traitBold)
+//        titleLabel.adjustsFontForContentSizeCategory = true
+//        titleLabel.clipsToBounds = false
+//
+//        subtitleLabel = UILabel()
+//        subtitleLabel.text = "Loading..."
+//        subtitleLabel.textColor = .label
+//        subtitleLabel.numberOfLines = 0
+//        subtitleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+//        subtitleLabel.adjustsFontForContentSizeCategory = true
 
         tableView = UITableView()
         tableView.backgroundColor = .clear
         tableView.register(ItemPosterInfoCell.self, forCellReuseIdentifier: ItemPosterInfoCell.reuseIdentifier)
         tableView.register(ItemInfoCell.self, forCellReuseIdentifier: ItemInfoCell.reuseIdentifier)
+        tableView.register(ItemTitleInfo.self, forCellReuseIdentifier: ItemTitleInfo.reuseIdentifier)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
@@ -154,8 +164,8 @@ class CXPreviewVC: UIViewController {
     private func addSubviews() {
         view.addSubview(backgroundImageView)
         view.addSubview(backgroundBluredView)
-        view.addSubview(titleLabel)
-        view.addSubview(subtitleLabel)
+//        view.addSubview(titleLabel)
+//        view.addSubview(subtitleLabel)
         view.addSubview(tableView)
         view.addSubview(actionsViewContainer)
         actionsViewContainer.addSubview(actionsView)
@@ -171,7 +181,7 @@ class CXPreviewVC: UIViewController {
         closeButton.pin(.trailing, to: view.trailing, constant: 8.5)
         closeButton.square(45)
 
-        tableView.pin(.top, to: subtitleLabel.bottom, constant: 8)
+        tableView.pin(.top, to: view.safeAreaLayoutGuide.topAnchor, constant: 8)
         tableView.pin(.bottom, to: actionsViewContainer.top, constant: 0)
         tableView.pin(.leading, to: view.leading)
         tableView.pin(.trailing, to: view.trailing)
@@ -184,15 +194,15 @@ class CXPreviewVC: UIViewController {
         actionsView.pin(.leading, to: view.leading, constant: 16)
         actionsView.pin(.trailing, to: view.trailing, constant: 16)
         actionsView.pin(.bottom, to: view.safeAreaLayoutGuide.bottomAnchor, constant: 16)
-        actionsView.height(45)
+        actionsView.height(35)
 
-        titleLabel.pin(.top, to: view.top, constant: 16)
-        titleLabel.pin(.leading, to: view.leading, constant: 16)
-        titleLabel.pin(.trailing, to: closeButton.leading, constant: 8)
-
-        subtitleLabel.pin(.leading, to: titleLabel.leading)
-        subtitleLabel.pin(.trailing, to: titleLabel.trailing)
-        subtitleLabel.pin(.top, to: titleLabel.bottom)
+//        titleLabel.pin(.top, to: view.top, constant: 16)
+//        titleLabel.pin(.leading, to: view.leading, constant: 16)
+//        titleLabel.pin(.trailing, to: closeButton.leading, constant: 8)
+//
+//        subtitleLabel.pin(.leading, to: titleLabel.leading)
+//        subtitleLabel.pin(.trailing, to: titleLabel.trailing)
+//        subtitleLabel.pin(.top, to: titleLabel.bottom)
     }
 
     @objc
@@ -210,8 +220,6 @@ class CXPreviewVC: UIViewController {
     private func update() {
         guard let itemInfo = itemInfo else { return }
         print(itemInfo)
-        titleLabel.text = itemInfo.title
-        subtitleLabel.text = "\(itemInfo.prettyYear)   \(itemInfo.rated)   \(itemInfo.prettyRuntime)   \(itemInfo.type.prefix(1).capitalized + itemInfo.type.dropFirst())"
         tableView.reloadData()
     }
 
@@ -255,23 +263,28 @@ extension CXPreviewVC: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
+        if indexPath.section == Section.HEADER_TITLE {
+            guard let itemInfo = itemInfo else { return ItemTitleInfo() }
+            let cell = tableView.dequeueReusableCell(withIdentifier: ItemTitleInfo.reuseIdentifier, for: indexPath) as! ItemTitleInfo
+            cell.setup(title: itemInfo.title, subtitle: itemInfo.prettySubinfo)
+            return cell
+        } else if indexPath.section == Section.POSTER_INFO {
             let cell = tableView.dequeueReusableCell(withIdentifier: ItemPosterInfoCell.reuseIdentifier, for: indexPath) as! ItemPosterInfoCell
             cell.setup(forItemInfo: itemInfo)
             return cell
-        } else if indexPath.section == 1 {
+        } else if indexPath.section == Section.GENRE_INFO {
             let cell = tableView.dequeueReusableCell(withIdentifier: ItemInfoCell.reuseIdentifier, for: indexPath) as! ItemInfoCell
             cell.setup(title: "Genre", description: itemInfo?.genre ?? "N/A")
             return cell
-        } else if indexPath.section == 2 {
+        } else if indexPath.section == Section.WRITER_INFO {
             let cell = tableView.dequeueReusableCell(withIdentifier: ItemInfoCell.reuseIdentifier, for: indexPath) as! ItemInfoCell
             cell.setup(title: "Writer", description: itemInfo?.writer ?? "N/A")
             return cell
-        } else if indexPath.section == 3 {
+        } else if indexPath.section == Section.DIRECTOR_INFO {
             let cell = tableView.dequeueReusableCell(withIdentifier: ItemInfoCell.reuseIdentifier, for: indexPath) as! ItemInfoCell
             cell.setup(title: "Director", description: itemInfo?.director ?? "N/A")
             return cell
-        } else if indexPath.section == 4 {
+        } else if indexPath.section == Section.ACTORS_INFO {
             let cell = tableView.dequeueReusableCell(withIdentifier: ItemInfoCell.reuseIdentifier, for: indexPath) as! ItemInfoCell
             cell.setup(title: "Actors", description: itemInfo?.actors ?? "N/A")
             return cell
