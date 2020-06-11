@@ -18,7 +18,7 @@ class CXActionButton: UIButton {
     private      var isDisabled  : Bool    { actionState == .disabled }
     private(set) var actionState : State   = .disabled { didSet { updateUI() } }
     private      var actionColor : UIColor = .label
-    private      var titles      : ToggleTitle = Text.empty
+    private      var titles      : (enabled: String, disabled: String) = Text.empty
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -27,7 +27,7 @@ class CXActionButton: UIButton {
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    convenience init(titles: ToggleTitle, color: UIColor, state: CXActionButton.State = .disabled) {
+    convenience init(titles: (String, String), color: UIColor, state: CXActionButton.State = .disabled) {
         self.init(type: .system)
         self.titleLabel?.font = UIFont.systemFont(ofSize: 11, weight: .semibold)
         defer {
