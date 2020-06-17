@@ -24,6 +24,15 @@ extension CXPreviewVCDelegate {
 
 class CXPreviewVC: UIViewController {
 
+    enum Section {
+        static let HEADER_TITLE     = 0
+        static let POSTER_INFO      = 1
+        static let GENRE_INFO       = 2
+        static let WRITER_INFO      = 3
+        static let DIRECTOR_INFO    = 4
+        static let ACTORS_INFO      = 5
+    }
+
     private var backgroundImageView     : CachedImageView!
     private var backgroundBluredView    : UIVisualEffectView!
     private var tableView               : UITableView!
@@ -31,16 +40,17 @@ class CXPreviewVC: UIViewController {
     private var actionsView             : ActionsView!
     private var actionsViewContainer    : UIView!
 
-    private var titleLabel              : UILabel!
-    private var subtitleLabel           : UILabel!
-
-    private var itemInfo                : OMDBItemFullInfo? { didSet { self.update() } }
+//    private var itemInfo                : OMDBItemFullInfo? { didSet { self.update() } }
+    private var itemInfo                : ItemInfo? { didSet { self.update() } }
+    private var item: Item?
     private var subscibers              = Set<AnyCancellable>()
-    private var dataPublisher           : AnyPublisher<OMDBItemFullInfo, Error>!
+//    private var dataPublisher           : AnyPublisher<OMDBItemFullInfo, Error>!
+    private var dataPublisher           : AnyPublisher<ItemInfo, Error>!
 
     @Published private var isFavorited  : Bool = false
     @Published private var isWatchlist  : Bool = false
     @Published private var isCheckedIn  : Bool = false
+    private var itemStatus = ItemStatus()
 
     weak var delegate: CXPreviewVCDelegate?
 
@@ -73,7 +83,7 @@ class CXPreviewVC: UIViewController {
     private func setupView() {
         view.backgroundColor = .systemBackground
 
-        dataPublisher = OMDBApi.search(endpoint: .imdbID(id))
+        dataPublisher = OMDBApi.search(.imdbID(id))
 
         setupSubviews()
         addSubviews()
@@ -94,11 +104,14 @@ class CXPreviewVC: UIViewController {
             .assign(to: \.isCheckedIn, on: self.actionsView)
             .store(in: &subscibers)
 
-        if let status = CXPersistantManager.status(forItem: id) {
+//        itemInfo = CXPersistantManager.get(itemID: id)
+        item = try? CXDataManager.getItem(forID: id)
+        itemInfo = item?.info
+        if let status = item?.status {
+            itemStatus  = status
             isFavorited = status.isFavorited
             isWatchlist = status.isBookmarked
             isCheckedIn = status.isCheckedIn
-            itemInfo = CXPersistantManager.get(itemID: id)
         }
 
         fetchItemInfo()
@@ -115,23 +128,11 @@ class CXPreviewVC: UIViewController {
         closeButton = CXCloseButton()
         closeButton.addTarget(self, action: #selector(closeScreen), for: .touchUpInside)
 
-        titleLabel = UILabel()
-        titleLabel.text = "Loading..."
-        titleLabel.textColor = .label
-        titleLabel.numberOfLines = 0
-        titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .bold)
-        titleLabel.clipsToBounds = false
-
-        subtitleLabel = UILabel()
-        subtitleLabel.text = "Loading..."
-        subtitleLabel.textColor = .label
-        subtitleLabel.numberOfLines = 1
-        subtitleLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-
         tableView = UITableView()
         tableView.backgroundColor = .clear
         tableView.register(ItemPosterInfoCell.self, forCellReuseIdentifier: ItemPosterInfoCell.reuseIdentifier)
         tableView.register(ItemInfoCell.self, forCellReuseIdentifier: ItemInfoCell.reuseIdentifier)
+        tableView.register(ItemTitleInfo.self, forCellReuseIdentifier: ItemTitleInfo.reuseIdentifier)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
@@ -152,8 +153,6 @@ class CXPreviewVC: UIViewController {
     private func addSubviews() {
         view.addSubview(backgroundImageView)
         view.addSubview(backgroundBluredView)
-        view.addSubview(titleLabel)
-        view.addSubview(subtitleLabel)
         view.addSubview(tableView)
         view.addSubview(actionsViewContainer)
         actionsViewContainer.addSubview(actionsView)
@@ -169,7 +168,7 @@ class CXPreviewVC: UIViewController {
         closeButton.pin(.trailing, to: view.trailing, constant: 8.5)
         closeButton.square(45)
 
-        tableView.pin(.top, to: subtitleLabel.bottom, constant: 8)
+        tableView.pin(.top, to: view.safeAreaLayoutGuide.topAnchor, constant: 8)
         tableView.pin(.bottom, to: actionsViewContainer.top, constant: 0)
         tableView.pin(.leading, to: view.leading)
         tableView.pin(.trailing, to: view.trailing)
@@ -182,15 +181,7 @@ class CXPreviewVC: UIViewController {
         actionsView.pin(.leading, to: view.leading, constant: 16)
         actionsView.pin(.trailing, to: view.trailing, constant: 16)
         actionsView.pin(.bottom, to: view.safeAreaLayoutGuide.bottomAnchor, constant: 16)
-        actionsView.height(45)
-
-        titleLabel.pin(.top, to: view.top, constant: 16)
-        titleLabel.pin(.leading, to: view.leading, constant: 16)
-        titleLabel.pin(.trailing, to: closeButton.leading, constant: 8)
-
-        subtitleLabel.pin(.leading, to: titleLabel.leading)
-        subtitleLabel.pin(.trailing, to: titleLabel.trailing)
-        subtitleLabel.pin(.top, to: titleLabel.bottom)
+        actionsView.height(35)
     }
 
     @objc
@@ -207,10 +198,14 @@ class CXPreviewVC: UIViewController {
 
     private func update() {
         guard let itemInfo = itemInfo else { return }
-        print(itemInfo)
-        titleLabel.text = itemInfo.title
-        subtitleLabel.text = "\(itemInfo.prettyYear)   \(itemInfo.rated)   \(itemInfo.prettyRuntime)"
+        item?.info = itemInfo
         tableView.reloadData()
+    }
+
+    private func updateRating(value: Int) {
+        guard let itemInfo = itemInfo else { return }
+        itemStatus.userRating = value
+        try? CXDataManager.set(rating: value, forItem: itemInfo)
     }
 
 }
@@ -221,21 +216,29 @@ extension CXPreviewVC: ActionsViewDelegate {
     func actionViewFavoriteDidTapped() {
         guard let itemInfo = itemInfo else { return }
         let newState = !isFavorited
-        CXPersistantManager.set(status: .favorited, forItem: itemInfo, newState: newState) { self.isFavorited = newState }
+//        CXPersistantManager.set(status: .favorited, forItem: itemInfo, newState: newState) { self.isFavorited = newState }
+        try? CXDataManager.set(status: .favorited(newState), forItem: itemInfo)
+        isFavorited = newState
     }
 
     func actionViewWatchlistDidTapped() {
         guard let itemInfo = itemInfo else { return }
         let newState = !isWatchlist
-        CXPersistantManager.set(status: .checkedIn, forItem: itemInfo, newState: false) { self.isCheckedIn = false }
-        CXPersistantManager.set(status: .bookmarked, forItem: itemInfo, newState: newState) { self.isWatchlist = newState }
+//        CXPersistantManager.set(status: .checkedIn, forItem: itemInfo, newState: false) { self.isCheckedIn = false }
+//        CXPersistantManager.set(status: .bookmarked, forItem: itemInfo, newState: newState) { self.isWatchlist = newState }
+        try? CXDataManager.set(status: .checkedIn(false), forItem: itemInfo)
+        try? CXDataManager.set(status: .bookmarked(newState), forItem: itemInfo)
+        isCheckedIn = false
+        isWatchlist = newState
     }
 
     func actionViewCheckInDidTapped() {
         guard let itemInfo = itemInfo else { return }
         let newState = !isCheckedIn
-        CXPersistantManager.set(status: .bookmarked, forItem: itemInfo, newState: false) { self.isWatchlist = false }
-        CXPersistantManager.set(status: .checkedIn, forItem: itemInfo, newState: newState) { self.isCheckedIn = newState }
+        try? CXDataManager.set(status: .bookmarked(false), forItem: itemInfo)
+        try? CXDataManager.set(status: .checkedIn(newState), forItem: itemInfo)
+        isWatchlist = false
+        isCheckedIn = newState
     }
 
 }
@@ -244,6 +247,7 @@ extension CXPreviewVC: ActionsViewDelegate {
 extension CXPreviewVC: UITableViewDelegate, UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
+        // Need to consider this as separate enum
         return 2 + 1 + 1 + 1
     }
 
@@ -252,23 +256,29 @@ extension CXPreviewVC: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
+        if indexPath.section == Section.HEADER_TITLE {
+            guard let itemInfo = itemInfo else { return ItemTitleInfo() }
+            let cell = tableView.dequeueReusableCell(withIdentifier: ItemTitleInfo.reuseIdentifier, for: indexPath) as! ItemTitleInfo
+            cell.setup(title: itemInfo.title, subtitle: itemInfo.prettySubinfo)
+            return cell
+        } else if indexPath.section == Section.POSTER_INFO {
+            let cell = tableView.dequeueReusableCell(withIdentifier: ItemPosterInfoCell.reuseIdentifier, for: indexPath) as! ItemPosterInfoCell
+            cell.setup(forItemInfo: item)
+            cell.ratingDidUpdated = updateRating
+            return cell
+        } else if indexPath.section == Section.GENRE_INFO {
             let cell = tableView.dequeueReusableCell(withIdentifier: ItemInfoCell.reuseIdentifier, for: indexPath) as! ItemInfoCell
             cell.setup(title: "Genre", description: itemInfo?.genre ?? "N/A")
             return cell
-        } else if indexPath.section == 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: ItemPosterInfoCell.reuseIdentifier, for: indexPath) as! ItemPosterInfoCell
-            cell.setup(forItemInfo: itemInfo)
-            return cell
-        } else if indexPath.section == 2 {
+        } else if indexPath.section == Section.WRITER_INFO {
             let cell = tableView.dequeueReusableCell(withIdentifier: ItemInfoCell.reuseIdentifier, for: indexPath) as! ItemInfoCell
             cell.setup(title: "Writer", description: itemInfo?.writer ?? "N/A")
             return cell
-        } else if indexPath.section == 3 {
+        } else if indexPath.section == Section.DIRECTOR_INFO {
             let cell = tableView.dequeueReusableCell(withIdentifier: ItemInfoCell.reuseIdentifier, for: indexPath) as! ItemInfoCell
             cell.setup(title: "Director", description: itemInfo?.director ?? "N/A")
             return cell
-        } else if indexPath.section == 4 {
+        } else if indexPath.section == Section.ACTORS_INFO {
             let cell = tableView.dequeueReusableCell(withIdentifier: ItemInfoCell.reuseIdentifier, for: indexPath) as! ItemInfoCell
             cell.setup(title: "Actors", description: itemInfo?.actors ?? "N/A")
             return cell

@@ -15,17 +15,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="9P6-zI-axS">
-                                <rect key="frame" x="44" y="0.0" width="326" height="896"/>
-                                <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_placehold" translatesAutoresizingMaskIntoConstraints="NO" id="9P6-zI-axS">
+                                <rect key="frame" x="114" y="298" width="186" height="301"/>
+                                <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="9P6-zI-axS" secondAttribute="trailing" constant="44" id="H4M-Le-2Sc"/>
-                            <constraint firstItem="9P6-zI-axS" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="44" id="QkC-aU-w2w"/>
-                            <constraint firstItem="9P6-zI-axS" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="34" id="sZR-N3-ion"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="top" secondItem="9P6-zI-axS" secondAttribute="top" constant="44" id="y29-kt-85w"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="9P6-zI-axS" secondAttribute="trailing" constant="114" id="H4M-Le-2Sc"/>
+                            <constraint firstItem="9P6-zI-axS" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="114" id="QkC-aU-w2w"/>
+                            <constraint firstItem="9P6-zI-axS" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="-263" id="sZR-N3-ion"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="top" secondItem="9P6-zI-axS" secondAttribute="top" constant="-254" id="y29-kt-85w"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -36,6 +36,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="logo_placeholder" width="958" height="506"/>
+        <image name="logo_placehold" width="1437" height="759"/>
     </resources>
 </document>

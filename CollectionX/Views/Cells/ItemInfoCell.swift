@@ -43,11 +43,11 @@ class ItemInfoCell: UITableViewCell {
         verticalLineView.backgroundColor = .systemYellow
 
         itemInfoTitle = UILabel()
-        itemInfoTitle.font = UIFont.systemFont(ofSize: 24, weight: .heavy)
+        itemInfoTitle.font = UIFont.preferredFont(forTextStyle: .title2, withTrait: .traitBold)
 
         itemInfoDescription = UILabel()
         itemInfoDescription.numberOfLines = 0
-        itemInfoDescription.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        itemInfoDescription.font = UIFont.preferredFont(forTextStyle: .body)
     }
 
     private func addSubviews() {
@@ -63,7 +63,7 @@ class ItemInfoCell: UITableViewCell {
         containerView.pin(.trailing, to: self.trailing, constant: 16)
         containerView.pin(.bottom, to: self.bottom, constant: 4)
 
-        itemInfoTitle.pin(.top, to: containerView.top, constant: 16)
+        itemInfoTitle.pin(.top, to: containerView.top, constant: 8)
         itemInfoTitle.pin(.leading, to: verticalLineView.trailing, constant: 6)
         itemInfoTitle.pin(.trailing, to: containerView.trailing, constant: 16)
 
@@ -72,10 +72,10 @@ class ItemInfoCell: UITableViewCell {
         verticalLineView.pin(.bottom, to: itemInfoTitle.bottom)
         verticalLineView.width(4)
 
-        itemInfoDescription.pin(.top, to: itemInfoTitle.bottom, constant: 8)
+        itemInfoDescription.pin(.top, to: itemInfoTitle.bottom, constant: 6)
         itemInfoDescription.pin(.leading, to: verticalLineView.leading)
         itemInfoDescription.pin(.trailing, to: containerView.trailing, constant: 16)
-        itemInfoDescription.pin(.bottom, to: containerView.bottom, constant: 16)
+        itemInfoDescription.pin(.bottom, to: containerView.bottom, constant: 8)
     }
 
     func setup(title: String, description: String) {

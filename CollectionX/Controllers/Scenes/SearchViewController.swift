@@ -15,12 +15,11 @@ class SearchViewController: UIViewController {
     typealias DataSource = UICollectionViewDiffableDataSource<Section, OMDBItem>
     typealias DataSourceSnapshot = NSDiffableDataSourceSnapshot<Section, OMDBItem>
 
-    enum Section {
-        case main
-    }
+    enum Section { case main }
 
     private var subscriptions        = Set<AnyCancellable>()
     private var items                = [OMDBItem]() { didSet { updateData(for: items) } }
+    private var movies               = [OMDBItem]()
     @Published private var searchKey = ""
 
     private var searchController    : UISearchController!
@@ -34,9 +33,6 @@ class SearchViewController: UIViewController {
     private var expandedCell        : ItemCardCell?
 
     private var page                : Int = 1
-    private var hasMoreFollowers    : Bool = true
-    private var isSearching         : Bool = false
-    private var isLoading           : Bool = false
 
     override var prefersStatusBarHidden: Bool {
         return isStatusBarHidden
@@ -69,20 +65,15 @@ class SearchViewController: UIViewController {
         searchController = UISearchController()
         searchController.searchResultsUpdater   = self
         searchController.searchBar.placeholder  = "Search for a movie"
+        searchController.obscuresBackgroundDuringPresentation = false
 
-        let padding: CGFloat                = 12
-        let minimumItemSpacing: CGFloat     = 10
-        let availableWidth                  = view.bounds.width - (padding * 2) - (minimumItemSpacing * 1)
-        let itemWidth                       = availableWidth / 2
-
-        collectionLayout = UICollectionViewFlowLayout()
-        collectionLayout.sectionInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
-        collectionLayout.itemSize = CGSize(width: itemWidth, height: 4/3 * itemWidth)
+        collectionLayout = CollecitonLayout.createThreeItemLayout(forFrame: view.bounds)
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionLayout)
         collectionView.register(ItemCardCell.self, forCellWithReuseIdentifier: ItemCardCell.reuseIdentifier)
         collectionView.delegate = self
         collectionView.backgroundColor = .systemBackground
+        collectionView.keyboardDismissMode = .onDrag
 
         dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { (collectionView, indexPath, item) -> ItemCardCell? in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItemCardCell.reuseIdentifier, for: indexPath) as! ItemCardCell
@@ -103,13 +94,13 @@ class SearchViewController: UIViewController {
     }
 
     private func updateData(for items: [OMDBItem]) {
+//        movies.append(contentsOf: items)
+
         var snapshot = DataSourceSnapshot()
         snapshot.appendSections([.main])
         snapshot.appendItems(items)
 
         dataSource.apply(snapshot, animatingDifferences: true)
-
-        isSearching = false
     }
 
     private func setupDataLoader() {
@@ -117,16 +108,13 @@ class SearchViewController: UIViewController {
             $searchKey
                 .removeDuplicates()
                 .filter({ !$0.isEmpty })
-                .debounce(for: 0.3, scheduler: RunLoop.current)
+                .debounce(for: 0.5, scheduler: RunLoop.current)
                 .sink(receiveValue: { [weak self] _ in self?.searchMovie() }))
             .store(in: &subscriptions)
     }
 
     private func searchMovie() {
-
-        if isSearching { return }
-
-        searchPublisher = OMDBApi.search(endpoint: .matching(query: searchKey, page: page))
+        searchPublisher = OMDBApi.search(.matching(query: searchKey, page: page))
 
         searchPublisher
             .receive(on: RunLoop.main)
@@ -150,6 +138,18 @@ extension SearchViewController: UISearchResultsUpdating {
 
 
 extension SearchViewController: UICollectionViewDelegate {
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+//        let offsetY = scrollView.contentOffset.y
+//        let contentHeight = scrollView.contentSize.height
+//        let heiht = scrollView.frame.size.height
+//
+//        if offsetY > contentHeight - heiht {
+//            guard hasMoreItems, !isLoading else { return }
+//            page += 1
+//            searchMovie()
+//        }
+    }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }

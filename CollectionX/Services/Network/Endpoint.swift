@@ -8,15 +8,18 @@
 
 import Foundation
 
-struct Endpoint {
+struct Endpoint: ApiAgentCallable {
+
+    var base        : String { "www.omdbapi.com" }
+    var scheme      : String { "https" }
     
     let path        : String
     let queryItems  : [URLQueryItem]
 
     var url: URL? {
         var components          = URLComponents()
-        components.scheme       = ApiAgent.scheme
-        components.host         = ApiAgent.base
+        components.scheme       = scheme
+        components.host         = base
         components.path         = path
         components.queryItems   = queryItems
         return components.url
@@ -25,32 +28,19 @@ struct Endpoint {
 }
 
 extension Endpoint {
-//    static func search(matching query: String) -> Endpoint {
-//        return Endpoint(path: "", queryItems: [
-//            URLQueryItem(name: ApiAgent.Key.apiKey, value: ApiAgent.apiKey),
-//            URLQueryItem(name: ApiAgent.Key.titleKey, value: query)
-//        ])
-//    }
-//
-//    static func matching(query: String) -> Endpoint {
-//        return Endpoint(path: "", queryItems: [
-//            URLQueryItem(name: ApiAgent.Key.api, value: ApiAgent.apiKey),
-//            URLQueryItem(name: ApiAgent.Key.search, value: query)
-//        ])
-//    }
 
     static func matching(query: String, page: Int = 1) -> Endpoint {
         return Endpoint(path: "", queryItems: [
-            URLQueryItem(name: ApiAgent.Key.api, value: ApiAgent.apiKey),
-            URLQueryItem(name: ApiAgent.Key.search, value: query),
-            URLQueryItem(name: ApiAgent.Key.page, value: "\(page)")
+            URLQueryItem(name: OMDBApi.Key.api, value: OMDBApi.apiKey),
+            URLQueryItem(name: OMDBApi.Key.search, value: query),
+            URLQueryItem(name: OMDBApi.Key.page, value: "\(page)")
         ])
     }
 
     static func imdbID(_ id: String) -> Endpoint {
         return Endpoint(path: "", queryItems: [
-            URLQueryItem(name: ApiAgent.Key.api, value: ApiAgent.apiKey),
-            URLQueryItem(name: ApiAgent.Key.imdbId, value: id)
+            URLQueryItem(name: OMDBApi.Key.api, value: OMDBApi.apiKey),
+            URLQueryItem(name: OMDBApi.Key.imdbId, value: id)
         ])
     }
 

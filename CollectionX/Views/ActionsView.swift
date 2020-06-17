@@ -26,9 +26,9 @@ class ActionsView: UIView {
     private var checkInBtn          : CXActionButton!
     private var spacer              : UIView!
 
-    private let fullSizeMultiplier  : CGFloat = 0.48
-    private let middleSizeMultiplier: CGFloat = (1 - 0.04 - 0.04) / 3
-    private let spacerSizeMultiplier: CGFloat = 0.04
+    private let fullSizeMultiplier  : CGFloat = 0.49
+    private let middleSizeMultiplier: CGFloat = (1 - 0.02 - 0.02) / 3
+    private let spacerSizeMultiplier: CGFloat = 0.02
     private let hiddenSizeConstant  : CGFloat = 0.00
 
     var isFavorited: Bool = false {
@@ -78,13 +78,13 @@ class ActionsView: UIView {
     private func setupSubviews() {
         spacer = UIView()
 
-        favoriteBtn = CXActionButton(title: "Favorite", color: .systemYellow)
+        favoriteBtn = CXActionButton(titles: Text.favorite, color: .systemYellow)
         favoriteBtn.addTarget(self, action: #selector(handleFavoriteAction), for: .touchUpInside)
 
-        watchlistBtn = CXActionButton(title: "Watchlist", color: .systemRed)
+        watchlistBtn = CXActionButton(titles: Text.watchlist, color: .systemRed)
         watchlistBtn.addTarget(self, action: #selector(handleWatchlistAction), for: .touchUpInside)
 
-        checkInBtn = CXActionButton(title: "Check-in", color: .systemGreen)
+        checkInBtn = CXActionButton(titles: Text.checkIn, color: .systemGreen)
         checkInBtn.addTarget(self, action: #selector(handleCheckInAction), for: .touchUpInside)
     }
 

@@ -11,18 +11,6 @@ import Combine
 
 struct ApiAgent {
 
-    enum Key {
-        static let api       = "apiKey"
-        static let search    = "s"
-        static let imdbId    = "i"
-        static let title     = "t"
-        static let page      = "page"
-    }
-
-    static let base     = "www.omdbapi.com"
-    static let scheme   = "https"
-    static let apiKey   = "bf4ec98b"
-
     func run<T: Decodable>(_ url: URL, _ decoder: JSONDecoder = JSONDecoder()) -> AnyPublisher<T, Error> {
         return URLSession.shared
             .dataTaskPublisher(for: url)
@@ -31,4 +19,9 @@ struct ApiAgent {
             .eraseToAnyPublisher()
     }
     
+}
+
+protocol ApiAgentCallable {
+    var base  : String { get }
+    var scheme: String { get }
 }

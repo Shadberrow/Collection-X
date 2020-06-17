@@ -13,11 +13,12 @@ class CXActionButton: UIButton {
     enum State { case active, disabled }
 
     private let firstAnimationDuration: Double = 0//0.25
-    private let secondAnimationDuration: Double = 0//0.1
+    private let secondAnimationDuration: Double = 0.1
 
     private      var isDisabled  : Bool    { actionState == .disabled }
     private(set) var actionState : State   = .disabled { didSet { updateUI() } }
     private      var actionColor : UIColor = .label
+    private      var titles      : (enabled: String, disabled: String) = Text.empty
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,30 +27,22 @@ class CXActionButton: UIButton {
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    convenience init(title: String, color: UIColor, state: CXActionButton.State = .disabled) {
+    convenience init(titles: (String, String), color: UIColor, state: CXActionButton.State = .disabled) {
         self.init(type: .system)
-        self.setTitle(title, for: .normal)
-        self.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        self.titleLabel?.font = UIFont.systemFont(ofSize: 11, weight: .semibold)
         defer {
             self.actionColor = color
             self.actionState = state
+            self.titles = titles
         }
     }
 
     private func setupView() {
         setTitleColor(.white, for: .normal)
-        layer.cornerRadius      = 10
+        layer.cornerRadius = 8
     }
 
     private func updateUI() {
-        UIView.animate(withDuration: firstAnimationDuration, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .curveEaseIn, animations: {
-            self.transform = CGAffineTransform(scaleX: 0.92, y: 0.92)
-        })
-
-        UIView.animate(withDuration: secondAnimationDuration, delay: firstAnimationDuration, usingSpringWithDamping: 0.4, initialSpringVelocity: 2, options: .curveEaseIn, animations: {
-            self.transform = CGAffineTransform.identity
-        }, completion: nil)
-
         DispatchQueue.main.asyncAfter(deadline: .now() + firstAnimationDuration) { [weak self] in
             guard let self = self else { return }
             self.layer.borderColor = self.isDisabled ? self.actionColor.cgColor : UIColor.clear.cgColor
@@ -58,6 +51,10 @@ class CXActionButton: UIButton {
             self.backgroundColor = self.isDisabled ? .clear : self.actionColor
             self.setTitleColor(self.isDisabled ? .label : .secondarySystemBackground, for: .normal)
         }
+
+        UIView.setAnimationsEnabled(false)
+        self.setTitle(self.isDisabled ? self.titles.disabled.uppercased() : self.titles.enabled.uppercased(), for: .normal)
+        UIView.setAnimationsEnabled(true)
     }
 
     func set(actionState: State) {
