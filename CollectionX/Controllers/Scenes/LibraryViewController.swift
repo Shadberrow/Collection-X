@@ -12,8 +12,8 @@ import YVAnchor
 
 class LibraryViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
 
-    typealias DataSource = UICollectionViewDiffableDataSource<Section, OMDBItemFullInfo>
-    typealias DataSourceSnapshot = NSDiffableDataSourceSnapshot<Section, OMDBItemFullInfo>
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, ItemInfo>
+    typealias DataSourceSnapshot = NSDiffableDataSourceSnapshot<Section, ItemInfo>
 
     enum Section { case main }
 
@@ -22,7 +22,7 @@ class LibraryViewController: UIViewController, UIAdaptivePresentationControllerD
     private var dataSource          : DataSource!
     private var snapshot            : DataSourceSnapshot!
 
-    private var favorites: [OMDBItemFullInfo] = [] {
+    private var favorites: [ItemInfo] = [] {
         didSet { updateUI(with: favorites) }
     }
     private var segmentedControl: UISegmentedControl!
@@ -93,15 +93,17 @@ class LibraryViewController: UIViewController, UIAdaptivePresentationControllerD
         collectionView.fill(in: view)
     }
 
-    private func updateUI(with items: [OMDBItemFullInfo]) {
+    private func updateUI(with items: [ItemInfo]) {
         navigationItem.prompt = NSLocalizedString("\(items.count) items in this list", comment: "")
         updateData(for: items)
     }
 
-    private func updateData(for items: [OMDBItemFullInfo]) {
+    private func updateData(for items: [ItemInfo]) {
         var snapshot = DataSourceSnapshot()
         snapshot.appendSections([.main])
-        snapshot.appendItems(favorites)
+        var news = items
+//        news.p
+        snapshot.appendItems(items.sorted(by: \.imdbRating))
 
         dataSource.apply(snapshot, animatingDifferences: true)
     }
@@ -110,11 +112,14 @@ class LibraryViewController: UIViewController, UIAdaptivePresentationControllerD
     private func handleSegmentChange(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
-            CXPersistantManager.getAll(.bookmarked, then: setter(for: self, \.favorites))
+//            CXPersistantManager.getAll(.bookmarked, then: setter(for: self, \.favorites))
+            favorites = (try? CXDataManager.getItems(for: .bookmarked).map({ $0.info })) ?? []
         case 1:
-            CXPersistantManager.getAll(.favorited, then: setter(for: self, \.favorites))
+//            CXPersistantManager.getAll(.favorited, then: setter(for: self, \.favorites))
+            favorites = (try? CXDataManager.getItems(for: .favorited).map({ $0.info })) ?? []
         case 2:
-            CXPersistantManager.getAll(.checkedIn, then: setter(for: self, \.favorites))
+//            CXPersistantManager.getAll(.checkedIn, then: setter(for: self, \.favorites))
+            favorites = (try? CXDataManager.getItems(for: .checkedIn).map({ $0.info })) ?? []
         default: return
         }
     }

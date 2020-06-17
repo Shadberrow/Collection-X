@@ -19,6 +19,18 @@ class ItemPosterInfoCell: UITableViewCell {
     private var plotTextView: UITextView!
     private var imdbInfoView: UIView!
 
+    private var rateBlurView: UIView!
+    private var rateButton: UIButton!
+    private var rateHint: UILabel!
+    private var rateView: StarRatingView!
+    private var rateValue: UILabel!
+
+    private(set) var rating = 0
+
+    private var rateViewBottomAnchor: NSLayoutConstraint!
+
+    var ratingDidUpdated: ((Int) -> Void)?
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
@@ -40,6 +52,7 @@ class ItemPosterInfoCell: UITableViewCell {
         containerView = UIView()
         containerView.backgroundColor = .systemGroupedBackground
         containerView.layer.cornerRadius = 18
+        containerView.layer.masksToBounds = true
 
         posterImageView = CachedImageView(cornerRadius: 12, placeholder: Images.logo_placeholder)
         posterImageView.tintColor = .label
@@ -56,12 +69,12 @@ class ItemPosterInfoCell: UITableViewCell {
         imdbRatingLabel = UILabel()
         imdbRatingLabel.text = "..."
         imdbRatingLabel.textColor = .label
-        imdbRatingLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        imdbRatingLabel.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
 
         imdbVotesLabel = UILabel()
         imdbVotesLabel.text = "..."
         imdbVotesLabel.textColor = .secondaryLabel
-        imdbVotesLabel.font = UIFont.monospacedSystemFont(ofSize: 10, weight: .regular)
+        imdbVotesLabel.font = UIFont.monospacedSystemFont(ofSize: 9, weight: .regular)
 
         plotTextView = UITextView()
         plotTextView.text = "Loading..."
@@ -73,6 +86,34 @@ class ItemPosterInfoCell: UITableViewCell {
         plotTextView.textContainerInset = .zero
         plotTextView.textContainer.lineFragmentPadding = 0
         plotTextView.textContainer.lineBreakMode = .byTruncatingTail
+
+        rateBlurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterial))
+        rateBlurView.alpha = 0
+        rateBlurView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleRate)))
+
+        rateButton = UIButton(type: .system)
+        rateButton.backgroundColor = .tertiarySystemBackground
+        rateButton.setTitle("RATE", for: .normal)
+        rateButton.titleLabel?.textAlignment = .center
+        rateButton.titleLabel?.font = UIFont.systemFont(ofSize: 11, weight: .semibold)
+        rateButton.tintColor = .label
+        rateButton.layer.cornerRadius = 6
+        rateButton.addTarget(self, action: #selector(handleRate), for: .touchUpInside)
+
+        rateHint = UILabel()
+        rateHint.text = "This is your personal rating"
+        rateHint.numberOfLines = 2
+        rateHint.textAlignment = .right
+        rateHint.textColor = .secondaryLabel
+        rateHint.font = UIFont.systemFont(ofSize: 8, weight: .bold)
+
+        rateView = StarRatingView(maxStars: 10)
+        rateView.backgroundColor = .tertiarySystemBackground
+        rateView.layer.cornerRadius = 6
+        rateView.alpha = 0
+        rateView.delegate = self
+
+        rateValue = UILabel()
     }
 
     private func addSubviews() {
@@ -83,6 +124,13 @@ class ItemPosterInfoCell: UITableViewCell {
         imdbInfoView.addSubview(imdbRatingLabel)
         imdbInfoView.addSubview(imdbVotesLabel)
         containerView.addSubview(plotTextView)
+
+        containerView.addSubview(rateBlurView)
+        containerView.addSubview(rateButton)
+        containerView.addSubview(rateHint)
+        containerView.addSubview(rateView)
+//        rateView.addSubview(rateStarsView)
+        containerView.addSubview(rateValue)
     }
 
     private func setupConstraints() {
@@ -102,12 +150,12 @@ class ItemPosterInfoCell: UITableViewCell {
         imdbInfoViewBottomAnchor.priority = .init(749)
         imdbInfoView.pin(.trailing, to: imdbRatingLabel.trailing)
         imdbInfoView.centerX(in: posterImageView)
-        imdbInfoView.height(30)
+        imdbInfoView.height(25)
 
         imdbLogoImageView.pin(.top, to: imdbInfoView.top)
         imdbLogoImageView.pin(.leading, to: imdbInfoView.leading)
         imdbLogoImageView.pin(.bottom, to: imdbInfoView.bottom)
-        imdbLogoImageView.width(53)
+        imdbLogoImageView.width(46)
 
         imdbRatingLabel.pin(.top, to: imdbLogoImageView.top)
         imdbRatingLabel.pin(.leading, to: imdbLogoImageView.trailing, constant: 8)
@@ -120,15 +168,57 @@ class ItemPosterInfoCell: UITableViewCell {
         plotTextView.pin(.trailing, to: containerView.trailing, constant: 16)
         let plotTextViewBottomAnchor = plotTextView.pin(.bottom, to: containerView.bottom, constant: 16)
         plotTextViewBottomAnchor.priority = .init(1e3)
+
+        rateBlurView.fill(in: containerView)
+
+        rateButton.pin(.trailing, to: containerView.trailing, constant: 16)
+        rateButton.size(width: 65, height: 25)
+        rateButton.pin(.bottom, to: containerView.bottom, constant: 16)
+
+        rateHint.pin(.top, to: rateButton.top)
+        rateHint.pin(.bottom, to: rateButton.bottom)
+        rateHint.pin(.trailing, to: rateButton.leading, constant: 8)
+        rateHint.width(70)
+
+//        rateView.pin(.trailing, to: containerView.trailing, constant: 16)
+        rateView.width(equalTo: containerView.width, multiplier: 0.8)
+        rateView.centered(in: containerView)
+//        rateViewBottomAnchor = rateView.pin(.bottom, to: rateButton.bottom)
+        rateView.height(45)
     }
 
-    func setup(forItemInfo item: OMDBItemFullInfo?) {
-        posterImageView.downloadImage(stringUrl: item?.posterUrl)
+    func setup(forItemInfo item: Item?) {
+        posterImageView.downloadImage(stringUrl: item?.info.posterUrl)
 
         guard let item = item else { return }
-        plotTextView.text = item.plot
-        imdbRatingLabel.text = "\(item.imdbRating)/10"
-        imdbVotesLabel.text = item.imdbVotes
+        plotTextView.text = item.info.plot
+        imdbRatingLabel.text = "\(item.info.imdbRating)/10"
+        imdbVotesLabel.text = item.info.imdbVotes
+
+        guard let rating = item.status.userRating else { return }
+        rateView.setRating(rating)
+    }
+
+    @objc
+    private func handleRate() {
+//        rateViewBottomAnchor.constant = self.rateView.alpha == 0 ? -48 : 0
+
+        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
+            self.rateBlurView.alpha = self.rateBlurView.alpha == 0 ? 1 : 0
+
+            self.rateView.alpha = self.rateView.alpha == 0 ? 1 : 0
+            self.containerView.layoutIfNeeded()
+        })
+    }
+
+}
+
+extension ItemPosterInfoCell: StarRatingViewDelegate {
+
+    func starViewDidRate(_ view: StarRatingView, rating: Int) {
+        rateButton.setTitle("\(rating)/10", for: .normal)
+        self.rating = rating
+        self.ratingDidUpdated?(rating)
     }
 
 }

@@ -53,7 +53,11 @@ class ItemCardCell: UICollectionViewCell {
     }
 
     func setup(withImageURLSting stringURL: String) {
-        posterImageView.downloadImage(stringUrl: stringURL)
+        if stringURL.contains("N/A") {
+            posterImageView.downloadImage(stringUrl: nil)
+        } else {
+            posterImageView.downloadImage(stringUrl: stringURL)
+        }
     }
 
 }

@@ -11,98 +11,99 @@ import XCTest
 
 class CollectionXTests: XCTestCase {
 
-    let movie1 = OMDBItemFullInfo(title      : "The Avengers",
-                                 year       : "2004",
-                                 released   : "2004",
-                                 runtime    : "120",
-                                 genre      : "genre",
-                                 actors     : "Some puls and guls",
-                                 posterUrl  : "https://img.jpg",
-                                 rated      : "1",
-                                 imdbRating : "7.6",
-                                 imdbVotes  : "12,321",
-                                 imdbID     : "tt00010",
-                                 type       : "movie", plot: "", director: "", writer: "")
-
-    let movie2 = OMDBItemFullInfo(title      : "The Avengers 2",
-                                  year       : "2008",
-                                  released   : "2008",
-                                  runtime    : "130",
-                                  genre      : "genre",
-                                  actors     : "Some puls and guls",
-                                  posterUrl  : "https://img.jpg",
-                                  rated      : "1",
-                                  imdbRating : "7.6",
-                                  imdbVotes  : "12,321",
-                                  imdbID     : "tt00011",
-                                  type       : "movie", plot: "", director: "", writer: "")
+    let movie3 = ItemInfo(title    : "The Avengers 3",
+                        year       : "2004",
+                        released   : "2004",
+                        runtime    : "120",
+                        genre      : "genre",
+                        actors     : "Some puls and guls",
+                        posterUrl  : "https://img.jpg",
+                        rated      : "1",
+                        imdbRating : "7.6",
+                        imdbVotes  : "12,321",
+                        imdbID     : "tt00012",
+                        type       : "movie", plot: "", director: "", writer: "")
 
     override class func tearDown() {
-        CXPersistantManager.clearAllItems()
+        CXDataManager.clearAll()
     }
 
-    func testPersistantManager_updateStatus_False() {
-        CXPersistantManager.clearAllItems()
+    func testDataManager_saveMovieAndTweekStatus() {
+        var savedItem: Item? = nil
 
-        CXPersistantManager.set(status: .favorited, forItem: movie1, newState: false) { print("Done") }
-        CXPersistantManager.getAll(.favorited) { XCTAssert($0 == []) }
+        // Clear all items in UsedDefaults storage
+        CXDataManager.clearAll()
+
+        // Save a new movie item to a database with 'Bookmarked' status set to true
+        // Fetch saved item from the database after it is saved
+        do    { try CXDataManager.set(status: .bookmarked(true), forItem: movie3)
+                try savedItem = CXDataManager.getItem(forID: movie3.imdbID) }
+        catch { assertionFailure(error.localizedDescription) }
+
+        // Check if item was saved successfully
+        // Check if item statuses are set correctly
+        XCTAssertTrue(savedItem != nil)
+        XCTAssert(savedItem?.status.isBookmarked == true)
+        XCTAssert(savedItem?.status.isFavorited == false)
+        XCTAssert(savedItem?.status.isCheckedIn == false)
+
+        // Update 'Favorite' status for the same movie to true
+        // Fetch saved item from the database
+        try? CXDataManager.set(status: .favorited(true), forItem: movie3)
+        try? savedItem = CXDataManager.getItem(forID: movie3.imdbID)
+
+        // Check if item statuses are set correctly
+        XCTAssert(savedItem?.status.isBookmarked == true)
+        XCTAssert(savedItem?.status.isFavorited == true)
+        XCTAssert(savedItem?.status.isCheckedIn == false)
+
+        // Update 'Bookmarked' status for the same movie to false
+        // Fetch saved item from the database
+        try? CXDataManager.set(status: .bookmarked(false), forItem: movie3)
+        try? savedItem = CXDataManager.getItem(forID: movie3.imdbID)
+
+        // Check if item statuses are set correctly
+        XCTAssert(savedItem?.status.isBookmarked == false)
+        XCTAssert(savedItem?.status.isFavorited == true)
+        XCTAssert(savedItem?.status.isCheckedIn == false)
+
+        // Remove movie from the database
+        // Check if item still exist
+        try? CXDataManager.removeItem(forID: movie3.imdbID)
+        try? savedItem = CXDataManager.getItem(forID: movie3.imdbID)
+
+        XCTAssertNil(savedItem)
+        
     }
 
-    func testPersistantManager_updateStatus_True_then_False() {
-        CXPersistantManager.clearAllItems()
+    func testDataManager_saveMovieToFavoriteAndGetAll() {
+        var allItems: [Item]? = nil
+        // Clear all items in UsedDefaults storage
+        CXDataManager.clearAll()
 
-        CXPersistantManager.set(status: .favorited, forItem: movie1, newState: true)
-
-        CXPersistantManager.getAll(.favorited) { XCTAssert($0 == [self.movie1]) }
-
-        CXPersistantManager.set(status: .favorited, forItem: movie1, newState: false)
-
-        CXPersistantManager.getAll(.favorited) { XCTAssert($0 == []) }
+        try? CXDataManager.set(status: .favorited(true), forItem: movie3)
+        try? allItems = CXDataManager.getItems(for: .favorited)
+        XCTAssertEqual(allItems?.map({ $0.info }), [movie3])
     }
 
-    func testPersistantManager_updateBookmarkStatus_False() {
-        CXPersistantManager.clearAllItems()
+    func testDataManager_saveMovieToBookmarksAndGetAll() {
+        var allItems: [Item]? = nil
+        // Clear all items in UsedDefaults storage
+        CXDataManager.clearAll()
 
-        CXPersistantManager.set(status: .bookmarked, forItem: movie1, newState: false)
-
-        CXPersistantManager.getAll(.bookmarked) { XCTAssert($0 == []) }
+        try? CXDataManager.set(status: .bookmarked(true), forItem: movie3)
+        try? allItems = CXDataManager.getItems(for: .bookmarked)
+        XCTAssertEqual(allItems?.map({ $0.info }), [movie3])
     }
 
-    func testPersistantManager_updateBookmarkStatus_True_then_False() {
-        CXPersistantManager.clearAllItems()
+    func testDataManager_saveMovieToCheckInsAndGetAll() {
+        var allItems: [Item]? = nil
+        // Clear all items in UsedDefaults storage
+        CXDataManager.clearAll()
 
-        CXPersistantManager.set(status: .bookmarked, forItem: movie1, newState: true)
-        CXPersistantManager.set(status: .bookmarked, forItem: movie2, newState: true)
-        CXPersistantManager.set(status: .favorited, forItem: movie2, newState: true)
-
-        CXPersistantManager.getAll(.favorited) { XCTAssert($0 == [self.movie2]) }
-        CXPersistantManager.getAll(.bookmarked) { XCTAssert($0 == [self.movie1, self.movie2]) }
-
-        CXPersistantManager.set(status: .bookmarked, forItem: movie1, newState: false)
-
-        CXPersistantManager.getAll(.favorited) { XCTAssert($0 == [self.movie2]) }
-        CXPersistantManager.getAll(.bookmarked) { XCTAssert($0 == [self.movie2]) }
-
-        CXPersistantManager.set(status: .favorited, forItem: movie2, newState: false)
-
-        CXPersistantManager.getAll(.favorited) { XCTAssert($0 == []) }
-        CXPersistantManager.getAll(.bookmarked) { XCTAssert($0 == [self.movie2]) }
-
-        CXPersistantManager.set(status: .bookmarked, forItem: movie2, newState: false)
-
-        CXPersistantManager.getAll(.favorited) { XCTAssert($0 == []) }
-        CXPersistantManager.getAll(.bookmarked) { XCTAssert($0 == []) }
-    }
-
-    func testPersistantManager_saveFavorite_andCheck() {
-        CXPersistantManager.clearAllItems()
-
-        CXPersistantManager.set(status: .favorited, forItem: movie1, newState: true)
-
-        XCTAssert(CXPersistantManager.get(itemID: movie1.imdbID) == movie1)
-        XCTAssert(CXPersistantManager.status(forItem: movie1.imdbID)?.isFavorited == true)
-        XCTAssert(CXPersistantManager.status(forItem: movie1.imdbID)?.isBookmarked == false)
-        XCTAssert(CXPersistantManager.status(forItem: movie1.imdbID)?.isCheckedIn == false)
+        try? CXDataManager.set(status: .checkedIn(true), forItem: movie3)
+        try? allItems = CXDataManager.getItems(for: .checkedIn)
+        XCTAssertEqual(allItems?.map({ $0.info }), [movie3])
     }
 
 }

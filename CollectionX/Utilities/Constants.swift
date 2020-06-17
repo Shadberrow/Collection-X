@@ -36,8 +36,11 @@ enum Text {
 
     static let empty = ("", "")
 
-    static let favorite: ToggleTitle  = (NSLocalizedString("Favorited", comment: ""), NSLocalizedString("Favorite", comment: ""))
-    static let watchlist: ToggleTitle = (NSLocalizedString("Watchlisted", comment: ""), NSLocalizedString("Watchlist", comment: ""))
-    static let checkIn: ToggleTitle   = (NSLocalizedString("Checked-in", comment: ""), NSLocalizedString("Check-in", comment: ""))
+    static let favorite : ToggleTitle = (NSLocalizedString("Favorited", comment: ""),
+                                         NSLocalizedString("Favorite", comment: ""))
+    static let watchlist: ToggleTitle = (NSLocalizedString("Watchlisted", comment: ""),
+                                         NSLocalizedString("Watchlist", comment: ""))
+    static let checkIn  : ToggleTitle = (NSLocalizedString("Checked-in", comment: ""),
+                                         NSLocalizedString("Check-in", comment: ""))
 
 }

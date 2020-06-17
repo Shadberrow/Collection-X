@@ -47,10 +47,7 @@ open class CachedImageView: UIImageView {
 
         URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
 
-            if error != nil {
-                print(error!)
-                return
-            }
+            if (error != nil) { return }
 
             guard let data = data, let image = UIImage(data: data) else { return }
 
