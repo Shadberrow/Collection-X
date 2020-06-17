@@ -25,19 +25,6 @@ struct Endpoint {
 }
 
 extension Endpoint {
-//    static func search(matching query: String) -> Endpoint {
-//        return Endpoint(path: "", queryItems: [
-//            URLQueryItem(name: ApiAgent.Key.apiKey, value: ApiAgent.apiKey),
-//            URLQueryItem(name: ApiAgent.Key.titleKey, value: query)
-//        ])
-//    }
-//
-//    static func matching(query: String) -> Endpoint {
-//        return Endpoint(path: "", queryItems: [
-//            URLQueryItem(name: ApiAgent.Key.api, value: ApiAgent.apiKey),
-//            URLQueryItem(name: ApiAgent.Key.search, value: query)
-//        ])
-//    }
 
     static func matching(query: String, page: Int = 1) -> Endpoint {
         return Endpoint(path: "", queryItems: [
