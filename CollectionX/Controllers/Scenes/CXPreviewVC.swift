@@ -40,16 +40,17 @@ class CXPreviewVC: UIViewController {
     private var actionsView             : ActionsView!
     private var actionsViewContainer    : UIView!
 
-//    private var titleLabel              : UILabel!
-//    private var subtitleLabel           : UILabel!
-
-    private var itemInfo                : OMDBItemFullInfo? { didSet { self.update() } }
+//    private var itemInfo                : OMDBItemFullInfo? { didSet { self.update() } }
+    private var itemInfo                : ItemInfo? { didSet { self.update() } }
+    private var item: Item?
     private var subscibers              = Set<AnyCancellable>()
-    private var dataPublisher           : AnyPublisher<OMDBItemFullInfo, Error>!
+//    private var dataPublisher           : AnyPublisher<OMDBItemFullInfo, Error>!
+    private var dataPublisher           : AnyPublisher<ItemInfo, Error>!
 
     @Published private var isFavorited  : Bool = false
     @Published private var isWatchlist  : Bool = false
     @Published private var isCheckedIn  : Bool = false
+    private var itemStatus = ItemStatus()
 
     weak var delegate: CXPreviewVCDelegate?
 
@@ -103,8 +104,11 @@ class CXPreviewVC: UIViewController {
             .assign(to: \.isCheckedIn, on: self.actionsView)
             .store(in: &subscibers)
 
-        if let status = CXPersistantManager.status(forItem: id) {
-            itemInfo = CXPersistantManager.get(itemID: id)
+//        itemInfo = CXPersistantManager.get(itemID: id)
+        item = try? CXDataManager.getItem(forID: id)
+        itemInfo = item?.info
+        if let status = item?.status {
+            itemStatus  = status
             isFavorited = status.isFavorited
             isWatchlist = status.isBookmarked
             isCheckedIn = status.isCheckedIn
@@ -123,21 +127,6 @@ class CXPreviewVC: UIViewController {
 
         closeButton = CXCloseButton()
         closeButton.addTarget(self, action: #selector(closeScreen), for: .touchUpInside)
-
-//        titleLabel = UILabel()
-//        titleLabel.text = "Loading..."
-//        titleLabel.textColor = .label
-//        titleLabel.numberOfLines = 0
-//        titleLabel.font = UIFont.preferredFont(forTextStyle: .title1, withTrait: .traitBold)
-//        titleLabel.adjustsFontForContentSizeCategory = true
-//        titleLabel.clipsToBounds = false
-//
-//        subtitleLabel = UILabel()
-//        subtitleLabel.text = "Loading..."
-//        subtitleLabel.textColor = .label
-//        subtitleLabel.numberOfLines = 0
-//        subtitleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
-//        subtitleLabel.adjustsFontForContentSizeCategory = true
 
         tableView = UITableView()
         tableView.backgroundColor = .clear
@@ -164,8 +153,6 @@ class CXPreviewVC: UIViewController {
     private func addSubviews() {
         view.addSubview(backgroundImageView)
         view.addSubview(backgroundBluredView)
-//        view.addSubview(titleLabel)
-//        view.addSubview(subtitleLabel)
         view.addSubview(tableView)
         view.addSubview(actionsViewContainer)
         actionsViewContainer.addSubview(actionsView)
@@ -195,14 +182,6 @@ class CXPreviewVC: UIViewController {
         actionsView.pin(.trailing, to: view.trailing, constant: 16)
         actionsView.pin(.bottom, to: view.safeAreaLayoutGuide.bottomAnchor, constant: 16)
         actionsView.height(35)
-
-//        titleLabel.pin(.top, to: view.top, constant: 16)
-//        titleLabel.pin(.leading, to: view.leading, constant: 16)
-//        titleLabel.pin(.trailing, to: closeButton.leading, constant: 8)
-//
-//        subtitleLabel.pin(.leading, to: titleLabel.leading)
-//        subtitleLabel.pin(.trailing, to: titleLabel.trailing)
-//        subtitleLabel.pin(.top, to: titleLabel.bottom)
     }
 
     @objc
@@ -223,6 +202,12 @@ class CXPreviewVC: UIViewController {
         tableView.reloadData()
     }
 
+    private func updateRating(value: Int) {
+        guard let itemInfo = itemInfo else { return }
+        itemStatus.userRating = value
+        try? CXDataManager.set(rating: value, forItem: itemInfo)
+    }
+
 }
 
 
@@ -231,21 +216,29 @@ extension CXPreviewVC: ActionsViewDelegate {
     func actionViewFavoriteDidTapped() {
         guard let itemInfo = itemInfo else { return }
         let newState = !isFavorited
-        CXPersistantManager.set(status: .favorited, forItem: itemInfo, newState: newState) { self.isFavorited = newState }
+//        CXPersistantManager.set(status: .favorited, forItem: itemInfo, newState: newState) { self.isFavorited = newState }
+        try? CXDataManager.set(status: .favorited(newState), forItem: itemInfo)
+        isFavorited = newState
     }
 
     func actionViewWatchlistDidTapped() {
         guard let itemInfo = itemInfo else { return }
         let newState = !isWatchlist
-        CXPersistantManager.set(status: .checkedIn, forItem: itemInfo, newState: false) { self.isCheckedIn = false }
-        CXPersistantManager.set(status: .bookmarked, forItem: itemInfo, newState: newState) { self.isWatchlist = newState }
+//        CXPersistantManager.set(status: .checkedIn, forItem: itemInfo, newState: false) { self.isCheckedIn = false }
+//        CXPersistantManager.set(status: .bookmarked, forItem: itemInfo, newState: newState) { self.isWatchlist = newState }
+        try? CXDataManager.set(status: .checkedIn(false), forItem: itemInfo)
+        try? CXDataManager.set(status: .bookmarked(newState), forItem: itemInfo)
+        isCheckedIn = false
+        isWatchlist = newState
     }
 
     func actionViewCheckInDidTapped() {
         guard let itemInfo = itemInfo else { return }
         let newState = !isCheckedIn
-        CXPersistantManager.set(status: .bookmarked, forItem: itemInfo, newState: false) { self.isWatchlist = false }
-        CXPersistantManager.set(status: .checkedIn, forItem: itemInfo, newState: newState) { self.isCheckedIn = newState }
+        try? CXDataManager.set(status: .bookmarked(false), forItem: itemInfo)
+        try? CXDataManager.set(status: .checkedIn(newState), forItem: itemInfo)
+        isWatchlist = false
+        isCheckedIn = newState
     }
 
 }
@@ -270,7 +263,8 @@ extension CXPreviewVC: UITableViewDelegate, UITableViewDataSource {
             return cell
         } else if indexPath.section == Section.POSTER_INFO {
             let cell = tableView.dequeueReusableCell(withIdentifier: ItemPosterInfoCell.reuseIdentifier, for: indexPath) as! ItemPosterInfoCell
-            cell.setup(forItemInfo: itemInfo)
+            cell.setup(forItemInfo: item)
+            cell.ratingDidUpdated = updateRating
             return cell
         } else if indexPath.section == Section.GENRE_INFO {
             let cell = tableView.dequeueReusableCell(withIdentifier: ItemInfoCell.reuseIdentifier, for: indexPath) as! ItemInfoCell
