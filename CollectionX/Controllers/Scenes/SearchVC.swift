@@ -74,7 +74,7 @@ class SearchVC: UIViewController, Bindable {
 
     private var searchController    : UISearchController!
     private var collectionView      : UICollectionView!
-    private var collectionLayout    : UICollectionViewFlowLayout!
+    private var collectionLayout    : UICollectionViewLayout!
 
     private var dataSource          : DataSource!
     private var movies              = [CollectionItem]()
@@ -102,7 +102,7 @@ class SearchVC: UIViewController, Bindable {
         searchController.searchBar.placeholder  = "Search for a movie or show"
         searchController.obscuresBackgroundDuringPresentation = false
 
-        collectionLayout = CollecitonLayout.createThreeItemLayout(forFrame: view.bounds)
+        collectionLayout = CollecitonLayout.makeCollectionViewLayout()//CollecitonLayout.createThreeItemLayout(forFrame: view.bounds)
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionLayout)
         collectionView.register(ItemCardCell.self, forCellWithReuseIdentifier: ItemCardCell.reuseIdentifier)
@@ -169,7 +169,9 @@ class SearchVC: UIViewController, Bindable {
 extension SearchVC: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
+        let vc = CXPreviewVC(itemID: item.imdbID, posterURLString: item.poster)
+        present(vc, animated: true)
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

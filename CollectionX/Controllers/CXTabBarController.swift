@@ -23,21 +23,15 @@ class CXTabBarController: UITabBarController {
 //                                                      title: "Search",
 //                                                      icon: SFSymbols.magnifyingGlass,
 //                                                      tag: 2)
-        searchNavController     = createTabController(controller: Scene.search(SearchViewModel()).viewController(),
-        title: "Search",
-        icon: SFSymbols.magnifyingGlass,
-        tag: 2)
-        libraryNavController  = createTabController(controller: LibraryViewController(),
-                                                      title: "Library",
-                                                      icon: SFSymbols.cards,
-                                                      tag: 3)
+        searchNavController     = createTabController(controller: Scene.search(SearchViewModel()).viewController(), title: "Search", icon: SFSymbols.magnifyingGlass, tag: 2)
+        libraryNavController  = createTabController(controller: LibraryViewController(), title: "Library", icon: SFSymbols.cards, tag: 3)
 
         viewControllers = [
             searchNavController,
             libraryNavController
         ]
 
-        selectedIndex = 1
+        selectedIndex = 0
     }
 
     private func createTabController<T: UIViewController>(controller: T, title: String?, icon: UIImage?, tag: Int) -> UINavigationController {
