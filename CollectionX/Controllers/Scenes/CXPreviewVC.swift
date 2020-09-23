@@ -107,7 +107,7 @@ class CXPreviewVC: UIViewController {
 //        itemInfo = CXPersistantManager.get(itemID: id)
         item = try? CXDataManager.getItem(forID: id)
         itemInfo = item?.info
-        if let status = item?.status {
+        if let status = try? CXDataManager.getItem(forID: id)?.status {
             itemStatus  = status
             isFavorited = status.isFavorited
             isWatchlist = status.isBookmarked
