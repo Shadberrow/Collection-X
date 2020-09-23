@@ -37,7 +37,7 @@ class CXTabBarController: UITabBarController {
             libraryNavController
         ]
 
-        selectedIndex = 1
+        selectedIndex = 0
     }
 
     private func createTabController<T: UIViewController>(controller: T, title: String?, icon: UIImage?, tag: Int) -> UINavigationController {

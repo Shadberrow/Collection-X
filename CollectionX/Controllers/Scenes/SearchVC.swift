@@ -169,7 +169,9 @@ class SearchVC: UIViewController, Bindable {
 extension SearchVC: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
+        let vc = CXPreviewVC(itemID: item.imdbID, posterURLString: item.poster)
+        present(vc, animated: true)
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

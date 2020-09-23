@@ -198,7 +198,7 @@ class CXPreviewVC: UIViewController {
 
     private func update() {
         guard let itemInfo = itemInfo else { return }
-        item?.info = itemInfo
+        item = Item(itemInfo)
         tableView.reloadData()
     }
 
