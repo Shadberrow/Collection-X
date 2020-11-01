@@ -19,12 +19,13 @@ class CXTabBarController: UITabBarController {
     }
 
     private func setup() {
-//        searchNavController     = createTabController(controller: SearchViewController(),
-//                                                      title: "Search",
-//                                                      icon: SFSymbols.magnifyingGlass,
-//                                                      tag: 2)
-        searchNavController     = createTabController(controller: Scene.search(SearchViewModel()).viewController(), title: "Search", icon: SFSymbols.magnifyingGlass, tag: 2)
-        libraryNavController  = createTabController(controller: LibraryViewController(), title: "Library", icon: SFSymbols.cards, tag: 3)
+        searchNavController   = createTabController(
+            controller: Scene.search(SearchViewModel()).viewController(),
+            title: "Search", icon: SFSymbols.magnifyingGlass, tag: 2)
+        
+        libraryNavController  = createTabController(
+            controller: LibraryViewController(),
+            title: "Library", icon: SFSymbols.cards, tag: 3)
 
         viewControllers = [
             searchNavController,

@@ -175,7 +175,6 @@ extension SearchVC: UICollectionViewDelegate {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        print(scrollView.contentOffset.y, scrollView.contentSize.height - scrollView.frame.size.height)
         if scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.frame.size.height {
             viewModel.loadNextPage()
         }

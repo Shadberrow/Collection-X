@@ -42,3 +42,16 @@ extension OMDBApi {
     static let apiKey   = "bf4ec98b"
 
 }
+
+
+enum TMDApi {
+    
+    private static let agent = ApiAgent()
+    
+    static func search<T: Codable>(_ endpoint: TMDEndpoint) -> AnyPublisher<T, Error> {
+        guard let url = endpoint.url else { return Fail(error: OMDBApiError.badURL).eraseToAnyPublisher() }
+        print(url)
+        return agent.run(url).eraseToAnyPublisher()
+    }
+    
+}

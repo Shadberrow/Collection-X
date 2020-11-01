@@ -45,3 +45,23 @@ extension Endpoint {
     }
 
 }
+
+
+struct TMDEndpoint: ApiAgentCallable {
+    
+    var base: String { "api.themoviedb.org/3" }
+    var scheme: String { "https" }
+    
+    let path: String
+    let queryItems: [URLQueryItem]
+    
+    var url: URL? {
+        var components          = URLComponents()
+        components.scheme       = scheme
+        components.host         = base
+        components.path         = path
+        components.queryItems   = queryItems
+        return components.url
+    }
+    
+}
