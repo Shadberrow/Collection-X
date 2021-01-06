@@ -1,0 +1,412 @@
+{
+  "page": 1,
+  "total_results": 83,
+  "total_pages": 5,
+  "results": [
+    {
+      "poster_path": "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+      "popularity": 55.321,
+      "vote_count": 17984,
+      "video": false,
+      "media_type": "movie",
+      "id": 603,
+      "adult": false,
+      "backdrop_path": "/fNG7i7RqMErkcqhohV2a6cV1Ehy.jpg",
+      "original_language": "en",
+      "original_title": "The Matrix",
+      "genre_ids": [
+        28,
+        878
+      ],
+      "title": "The Matrix",
+      "vote_average": 8.1,
+      "overview": "Set in the 22nd century, The Matrix tells the story of a computer hacker who joins a group of underground insurgents fighting the vast and powerful computers who now rule the earth.",
+      "release_date": "1999-03-30"
+    },
+    {
+      "vote_count": 7267,
+      "popularity": 43.442,
+      "id": 604,
+      "video": false,
+      "media_type": "movie",
+      "vote_average": 6.9,
+      "title": "The Matrix Reloaded",
+      "release_date": "2003-05-15",
+      "original_language": "en",
+      "original_title": "The Matrix Reloaded",
+      "genre_ids": [
+        12,
+        28,
+        53,
+        878
+      ],
+      "backdrop_path": "/sDxCd4nt3eR4qOCW1GoD0RabQtq.jpg",
+      "adult": false,
+      "overview": "Six months after the events depicted in The Matrix, Neo has proved to be a good omen for the free humans, as more and more humans are being freed from the matrix and brought to Zion, the one and only stronghold of the Resistance.  Neo himself has discovered his superpowers including super speed, ability to see the codes of the things inside the matrix and a certain degree of pre-cognition. But a nasty piece of news hits the human resistance: 250,000 machine sentinels are digging to Zion and would reach them in 72 hours. As Zion prepares for the ultimate war, Neo, Morpheus and Trinity are advised by the Oracle to find the Keymaker who would help them reach the Source.  Meanwhile Neo's recurrent dreams depicting Trinity's death have got him worried and as if it was not enough, Agent Smith has somehow escaped deletion, has become more powerful than before and has fixed Neo as his next target.",
+      "poster_path": "/jBegA6V243J6HUnpcOILsRvBnGb.jpg"
+    },
+    {
+      "vote_count": 6532,
+      "popularity": 39.364,
+      "id": 605,
+      "video": false,
+      "media_type": "movie",
+      "vote_average": 6.6,
+      "title": "The Matrix Revolutions",
+      "release_date": "2003-11-03",
+      "original_language": "en",
+      "original_title": "The Matrix Revolutions",
+      "genre_ids": [
+        12,
+        28,
+        53,
+        878
+      ],
+      "backdrop_path": "/t9dumNakkt6yL9wreEp35T4Lwny.jpg",
+      "adult": false,
+      "overview": "The human city of Zion defends itself against the massive invasion of the machines as Neo fights to end the war at another front while also opposing the rogue Agent Smith.",
+      "poster_path": "/fgm8OZ7o4G1G1I9EeGcb85Noe6L.jpg"
+    },
+    {
+      "poster_path": "/rKXDOyqYiLAcy6GoeHn0BvoHbJS.jpg",
+      "popularity": 18.908,
+      "vote_count": 0,
+      "video": false,
+      "media_type": "movie",
+      "id": 624860,
+      "adult": false,
+      "backdrop_path": null,
+      "original_language": "en",
+      "original_title": "The Matrix 4",
+      "genre_ids": [
+        28,
+        12,
+        878
+      ],
+      "title": "The Matrix 4",
+      "vote_average": 0,
+      "overview": "The fourth installment in The Matrix franchise. Plot unknown.",
+      "release_date": "2021-12-22"
+    },
+    {
+      "poster_path": "/fNG2JOskhQnttmAaj2knM5h59Io.jpg",
+      "popularity": 15.117,
+      "vote_count": 128,
+      "video": false,
+      "media_type": "movie",
+      "id": 14543,
+      "adult": false,
+      "backdrop_path": "/lBdXACywnLwKUZmZkZ87djDQBeV.jpg",
+      "original_language": "en",
+      "original_title": "The Matrix Revisited",
+      "genre_ids": [
+        99
+      ],
+      "title": "The Matrix Revisited",
+      "vote_average": 6.9,
+      "overview": "The film goes behind the scenes of the 1999 sci-fi movie The Matrix.",
+      "release_date": "2001-11-19"
+    },
+    {
+      "poster_path": "/vmhBIPKyYCWlp2PrIIc6EXZlP9Z.jpg",
+      "popularity": 9.23,
+      "vote_count": 7,
+      "video": false,
+      "media_type": "movie",
+      "id": 51767,
+      "adult": false,
+      "backdrop_path": null,
+      "original_language": "en",
+      "original_title": "Sexual Matrix",
+      "genre_ids": [
+        878
+      ],
+      "title": "Sexual Matrix",
+      "vote_average": 6.5,
+      "overview": "\"Sexual Matrix\" is about a matrix that is sexual. A horny professor decides to ask his students all about their sexual fantasies. Of course he does. So while they're describing their wildest dreams, he plugs them into his matrix machine and it lets them live out their fantasies. It seems so real! Mia Zottoli shows up to assist the professor in his quest to know what turns the whole campus on",
+      "release_date": "2000-04-01"
+    },
+    {
+      "original_name": "Matrix",
+      "id": 11393,
+      "media_type": "tv",
+      "name": "Matrix",
+      "popularity": 4.532,
+      "vote_count": 1,
+      "vote_average": 5,
+      "first_air_date": "1993-03-01",
+      "poster_path": null,
+      "genre_ids": [
+        18
+      ],
+      "original_language": "en",
+      "backdrop_path": null,
+      "overview": "Matrix is the title of a Canadian-produced fantasy/adventure series that ran for 13 episodes during 1993 on the USA Network in the United States. The series later enjoyed a brief revival of interest due to a coincidence involving one of its stars.",
+      "origin_country": [
+        "US",
+        "CA"
+      ]
+    },
+    {
+      "original_name": "Threat Matrix",
+      "genre_ids": [
+        18,
+        10759
+      ],
+      "media_type": "tv",
+      "name": "Threat Matrix",
+      "popularity": 4.581,
+      "origin_country": [
+        "US"
+      ],
+      "vote_count": 2,
+      "first_air_date": "2003-09-18",
+      "backdrop_path": null,
+      "original_language": "en",
+      "id": 711,
+      "vote_average": 3.5,
+      "overview": "Against the rising threat, the Homeland Security Agency has created a highly specialized, elite task force trained and equipped to counter anyone or anything that threatens our nation. The head of this super-secret team is Special Agent John Kilmer. He reports only to the President and has authority to call upon the technical skills, firepower and the specialist agents of the FBI, CIA and NSA.",
+      "poster_path": null
+    },
+    {
+      "poster_path": "/gb7C4oRzYWXWCuZMR1cwtHa53Pz.jpg",
+      "popularity": 7.265,
+      "vote_count": 5,
+      "video": false,
+      "media_type": "movie",
+      "id": 591955,
+      "adult": false,
+      "backdrop_path": null,
+      "original_language": "en",
+      "original_title": "The Matrix Reloaded Revisited",
+      "genre_ids": [
+        99
+      ],
+      "title": "The Matrix Reloaded Revisited",
+      "vote_average": 7.4,
+      "overview": "The making of The Matrix Reloaded:  Go to the middle movies furthest reaches via five documentary paths revealing 21 featurettes",
+      "release_date": "2004-12-07"
+    },
+    {
+      "poster_path": "/gRni1Q651AZPnLqZczmahiIxG0s.jpg",
+      "popularity": 5.918,
+      "vote_count": 25,
+      "video": false,
+      "media_type": "movie",
+      "id": 221495,
+      "adult": false,
+      "backdrop_path": null,
+      "original_language": "en",
+      "original_title": "The Matrix Recalibrated",
+      "genre_ids": [
+        99,
+        878
+      ],
+      "title": "The Matrix Recalibrated",
+      "vote_average": 6.7,
+      "overview": "The making of Matrix Revolutions, The (2003) is briefly touched on here in this documentary. Interviews with various cast and crew members inform us how they were affected by the deaths of Gloria Foster and Aaliyah, and also delve into the making of the visual effects that takes up a lot of screen time. Written by Rhyl Donnelly",
+      "release_date": "2004-04-06"
+    },
+    {
+      "poster_path": "/7sUCRdjGe7VggDCGIHywfguYdAK.jpg",
+      "popularity": 5.377,
+      "vote_count": 28,
+      "video": false,
+      "media_type": "movie",
+      "id": 33322,
+      "adult": false,
+      "backdrop_path": null,
+      "original_language": "ja",
+      "original_title": "アミテージ・ザ・サード POLY-MATRIX",
+      "genre_ids": [
+        16,
+        878,
+        53
+      ],
+      "title": "Armitage III: Poly Matrix",
+      "vote_average": 6.6,
+      "overview": "Ross Sylibus is assigned to a police unit on a Martian colony, to find that women are being murdered by a psychotic named D'anclaude. He is assigned a very unorthodox partner named Naomi Armitage, who seems to have links to the victims. To stir things up more, every victim is found to be an illegally made third-generation android.",
+      "release_date": "1996-06-25"
+    },
+    {
+      "poster_path": null,
+      "popularity": 3.896,
+      "vote_count": 3,
+      "video": false,
+      "media_type": "movie",
+      "id": 217056,
+      "adult": false,
+      "backdrop_path": null,
+      "original_language": "en",
+      "original_title": "Matrix of Evil",
+      "genre_ids": [
+        99
+      ],
+      "title": "Matrix of Evil",
+      "vote_average": 6.8,
+      "overview": "is a dynamic 2 hour video featuring some of the most informed minds in the world today who expose the latest revelations of the New World Order's agenda in shocking detail.",
+      "release_date": "2003-01-01"
+    },
+    {
+      "poster_path": "/3pT6TI22UbIckjoMu05tO2mkLYW.jpg",
+      "popularity": 2.551,
+      "vote_count": 8,
+      "video": false,
+      "media_type": "movie",
+      "id": 129399,
+      "adult": false,
+      "backdrop_path": null,
+      "original_language": "en",
+      "original_title": "Time Matrix",
+      "genre_ids": [
+        9648,
+        878
+      ],
+      "title": "Time Matrix",
+      "vote_average": 4.3,
+      "overview": "In the near future, police detective Richard Manning is investigating the most difficult case of his career – the seemingly impossible locked room murder of a wealthy property investor. The more Richard investigates, the more complex the case seems to become. He soon realizes his own future and survival depend on him solving everything – and quickly.",
+      "release_date": "2013-01-01"
+    },
+    {
+      "poster_path": "/p5nd9VPKxpow5MFAQfZy2DEatPI.jpg",
+      "popularity": 3.531,
+      "vote_count": 27,
+      "video": false,
+      "media_type": "movie",
+      "id": 21769,
+      "adult": false,
+      "backdrop_path": null,
+      "original_language": "ja",
+      "original_title": "アミテージ・ザ・サード DUAL-MATRIX",
+      "genre_ids": [
+        28,
+        12,
+        16,
+        878,
+        53
+      ],
+      "title": "Armitage: Dual Matrix",
+      "vote_average": 6.5,
+      "overview": "Naomi Armitage and Ross Sylibus have changed their names and live with their daughter Yoko as a happy and normal family on Mars — until an android riot breaks out at an anti-matter plant on Earth.",
+      "release_date": "2002-03-22"
+    },
+    {
+      "poster_path": null,
+      "popularity": 5.029,
+      "vote_count": 9,
+      "video": false,
+      "media_type": "movie",
+      "id": 26214,
+      "adult": false,
+      "backdrop_path": null,
+      "original_language": "en",
+      "original_title": "The American Matrix - Age Of Deception",
+      "genre_ids": [
+        99
+      ],
+      "title": "The American Matrix - Age Of Deception",
+      "vote_average": 5,
+      "overview": "A shocking new 2 hour film by B.A. Brooks. This 2010 release is a follow up to \"The Decline And Fall Of America\" which was released in 2008. \"The American Matrix - Age Of Deception\" details news items that all people should be aware of such as the economic collapse of The United States and the formation of the a New World Order. See what has really been going on in America today.",
+      "release_date": "2010-01-01"
+    },
+    {
+      "poster_path": "/zkpzfTyF7BjadH1PZKlC6kueWXf.jpg",
+      "popularity": 3.34,
+      "vote_count": 2,
+      "video": false,
+      "media_type": "movie",
+      "id": 684731,
+      "adult": false,
+      "backdrop_path": null,
+      "original_language": "en",
+      "original_title": "The Matrix Reloaded: Pre-Load",
+      "genre_ids": [
+        28,
+        99,
+        878
+      ],
+      "title": "The Matrix Reloaded: Pre-Load",
+      "vote_average": 4,
+      "overview": "This making-of piece offers the standard mix of movie snippets, behind the scenes materials, and interviews from cast and crew on the making of the film.",
+      "release_date": "2003-10-14"
+    },
+    {
+      "poster_path": null,
+      "popularity": 1.4,
+      "vote_count": 0,
+      "video": false,
+      "media_type": "movie",
+      "id": 259464,
+      "adult": false,
+      "backdrop_path": null,
+      "original_language": "en",
+      "original_title": "V-World Matrix",
+      "genre_ids": [
+        14,
+        27,
+        878
+      ],
+      "title": "V-World Matrix",
+      "vote_average": 0,
+      "overview": "Two friends take a cyber vacation to experience a world where they can act out their virtual fantasies! They soon realize they've entered a virtual free-for-all. Forbidden fantasies and desires suddenly appear in the form of the even deadlier \"dark woman\". All the players now end up in a cyber battle for their lives, and sanity, against a beautiful virtual hunter who has one killer fixation - winning the deadly game they started!",
+      "release_date": "1999-01-01"
+    },
+    {
+      "poster_path": "/61ASnmqvzpuz9VEfFElo3e2nIft.jpg",
+      "popularity": 3.479,
+      "vote_count": 5,
+      "video": false,
+      "media_type": "movie",
+      "id": 503880,
+      "adult": false,
+      "backdrop_path": null,
+      "original_language": "en",
+      "original_title": "The Matrix Revolutions Revisited",
+      "genre_ids": [
+        99
+      ],
+      "title": "The Matrix Revolutions Revisited",
+      "vote_average": 8.4,
+      "overview": "The making of The Matrix Revolutions:\r The cataclysmic final confrontation chronicled through six documentary pods revealing 28 featurettes",
+      "release_date": "2004-12-07"
+    },
+    {
+      "poster_path": null,
+      "popularity": 1.4,
+      "vote_count": 0,
+      "video": false,
+      "media_type": "movie",
+      "id": 411948,
+      "adult": false,
+      "backdrop_path": null,
+      "original_language": "en",
+      "original_title": "Matrix",
+      "genre_ids": [],
+      "title": "Matrix",
+      "vote_average": 0,
+      "overview": "John Whitney, Sr. (April 8, 1917 – September 22, 1995) was an American animator, composer and inventor, widely considered to be one of the fathers of computer animation.",
+      "release_date": "1971-05-18"
+    },
+    {
+      "poster_path": "/m2yIfRJYwpCgHON1Ig1pNKMWTxp.jpg",
+      "popularity": 1.624,
+      "vote_count": 3,
+      "video": false,
+      "media_type": "movie",
+      "id": 684431,
+      "adult": false,
+      "backdrop_path": null,
+      "original_language": "en",
+      "original_title": "Making 'The Matrix'",
+      "genre_ids": [
+        28,
+        99,
+        878
+      ],
+      "title": "Making 'The Matrix'",
+      "vote_average": 7.3,
+      "overview": "A promotional making-of documentary for the film Matrix, The (1999) that devotes its time to explaining the digital and practical effects contained in the film. This is very interesting, seeing as how they're giving away the cinematic secrets that they created solely for the this movie, that have now been spoofed and referenced in countless other films.",
+      "release_date": "1999-09-21"
+    }
+  ]
+}

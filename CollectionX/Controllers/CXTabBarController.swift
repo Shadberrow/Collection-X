@@ -12,18 +12,20 @@ class CXTabBarController: UITabBarController {
 
     private var searchNavController    : UINavigationController!
     private var libraryNavController   : UINavigationController!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
     }
 
     private func setup() {
-        searchNavController   = createTabController(
-            controller: Scene.search(SearchViewModel()).viewController(),
+        let searchViewModel = SearchViewModel(dataStore: TMDRemoteDataStore())
+        
+        searchNavController = createTabController(
+            controller: Scene.search(searchViewModel).viewController(),
             title: "Search", icon: SFSymbols.magnifyingGlass, tag: 2)
         
-        libraryNavController  = createTabController(
+        libraryNavController = createTabController(
             controller: LibraryViewController(),
             title: "Library", icon: SFSymbols.cards, tag: 3)
 

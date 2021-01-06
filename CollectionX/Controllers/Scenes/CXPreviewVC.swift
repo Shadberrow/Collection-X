@@ -83,7 +83,7 @@ class CXPreviewVC: UIViewController {
     private func setupView() {
         view.backgroundColor = .systemBackground
 
-        dataPublisher = OMDBApi.search(.imdbID(id))
+//        dataPublisher = OMDBApi.search(.imdbID(id))
 
         setupSubviews()
         addSubviews()

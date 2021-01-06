@@ -97,5 +97,6 @@ class DiscardableImageContent: NSObject, NSDiscardableContent {
     public func isContentDiscarded() -> Bool {
         return image == nil
     }
+    
 }
 

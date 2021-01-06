@@ -78,7 +78,7 @@ class LibraryViewController: UIViewController, UIAdaptivePresentationControllerD
 
         dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { (collectionView, indexPath, item) -> ItemCardCell? in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItemCardCell.reuseIdentifier, for: indexPath) as! ItemCardCell
-            cell.setup(withImageURLSting: item.posterUrl)
+//            cell.setup(withImageURLSting: item.posterUrl)
             return cell
         })
     }

@@ -8,49 +8,11 @@
 
 import Foundation
 
-struct Endpoint: ApiAgentCallable {
-
-    var base        : String { "www.omdbapi.com" }
-    var scheme      : String { "https" }
+struct Endpoint {
     
-    let path        : String
-    let queryItems  : [URLQueryItem]
-
-    var url: URL? {
-        var components          = URLComponents()
-        components.scheme       = scheme
-        components.host         = base
-        components.path         = path
-        components.queryItems   = queryItems
-        return components.url
-    }
-    
-}
-
-extension Endpoint {
-
-    static func matching(query: String, page: Int = 1) -> Endpoint {
-        return Endpoint(path: "", queryItems: [
-            URLQueryItem(name: OMDBApi.Key.api, value: OMDBApi.apiKey),
-            URLQueryItem(name: OMDBApi.Key.search, value: query),
-            URLQueryItem(name: OMDBApi.Key.page, value: "\(page)")
-        ])
-    }
-
-    static func imdbID(_ id: String) -> Endpoint {
-        return Endpoint(path: "", queryItems: [
-            URLQueryItem(name: OMDBApi.Key.api, value: OMDBApi.apiKey),
-            URLQueryItem(name: OMDBApi.Key.imdbId, value: id)
-        ])
-    }
-
-}
-
-
-struct TMDEndpoint: ApiAgentCallable {
-    
-    var base: String { "api.themoviedb.org/3" }
-    var scheme: String { "https" }
+    var base: String { VaporAPI.base }
+    var port: Int { VaporAPI.port }
+    var scheme: String { VaporAPI.scheme }
     
     let path: String
     let queryItems: [URLQueryItem]
@@ -61,7 +23,20 @@ struct TMDEndpoint: ApiAgentCallable {
         components.host         = base
         components.path         = path
         components.queryItems   = queryItems
+        components.port         = port
         return components.url
+    }
+    
+}
+
+extension Endpoint {
+    
+    static func matching(query: String, page: Int = 1, per: Int = 20) -> Endpoint {
+        return Endpoint(path: VaporAPI.Key.search, queryItems: [
+            URLQueryItem(name: VaporAPI.Key.title, value: query),
+            URLQueryItem(name: VaporAPI.Key.page, value: "\(page)"),
+            URLQueryItem(name: VaporAPI.Key.per, value: "\(per)")
+        ])
     }
     
 }

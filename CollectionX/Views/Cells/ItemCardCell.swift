@@ -52,13 +52,8 @@ class ItemCardCell: UICollectionViewCell {
         posterImageView.fill(in: self)
     }
 
-    func setup(withImageURLSting stringURL: String) {
-        if stringURL.contains("N/A") {
-            posterImageView.downloadImage(stringUrl: nil)
-        } else {
-            posterImageView.downloadImage(stringUrl: stringURL)
-        }
+    func setup(with item: ItemCardPresentable) {
+        posterImageView.downloadImage(stringUrl: item.imageUrlString)
     }
-
+    
 }
-

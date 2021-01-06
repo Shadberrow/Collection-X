@@ -17,9 +17,7 @@ extension Scene {
     func viewController() -> UIViewController {
         switch self {
         case let .search(viewModel):
-            var controller = SearchVC()
-            controller.bind(viewModel: viewModel)
-            return controller
+            return SearchViewController(viewModel: viewModel)
         }
     }
 
